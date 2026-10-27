@@ -1,25 +1,32 @@
-# Checklist da rubrica
+# Checklist da rubrica — AF Tecnologias Hackers 2026.2
 
-| Requisito | Estado | Arquivo/evidência |
+**Atualização:** 27/10/2026, após as três execuções técnicas documentadas no Bloco 03.  
+**Regra de leitura:** CONCLUÍDO TÉCNICO não equivale a ACEITO ACADEMICAMENTE. Evidências primárias estão nos JSONL privados do KIT11; este checklist utiliza os relatórios publicados, não substitui a auditoria dos logs pelo grupo.
+
+| Critério / requisito | Situação atual | Evidências e pendências |
 |---|---|---|
-| Diagnóstico do Ubuntu e topologia local | CONCLUÍDO | diagnostico.md e docs/STATE.md; acesso Kali/VPN confirmado pelo usuário; isolamento WAN pendente |
-| Juice Shop local e acesso Kali | PARCIAL | HTTP real 200 em 127.0.0.1:3000 e 10.0.80.3:3001 pelo Ubuntu; Kali/VPN confirmado pelo usuário com HTTP 200; isolamento WAN pendente |
-| LLM local e chamada JSON real | CONCLUÍDO | Ollama/Qwen3 4B real; docs/STATE.md e docs/ENGENHARIA_BLOCO02.md |
-| Agente com escolha dinâmica e ferramentas | CONCLUÍDO EM ENGENHARIA | GET e Nmap reais; propostas diferentes após HTTP 200/404 sob objetivo delimitado; tentativa inicial falhou e foi preservada |
-| Aprovação, alteração e rejeição | CONCLUÍDO EM ENGENHARIA | rejeição e segunda aprovação testadas com fixtures; modificação, segunda aprovação e rejeição de inferência reais pelo usuário via conversa |
-| Logs completos e restauração | CONCLUÍDO EM ENGENHARIA | IDs, interpretação após resultado, decisão posterior e logs privados; restauração de marcador descartável no bloco 01; logs acadêmicos dependem do bloco 03 |
-| Aprovação do plano e requisito de planejamento inicial | APROVAÇÃO DO GRUPO DECLARADA; comprovação de integrantes/data e alinhamento sobre uso de LLM ainda pendentes | plano_humano.md (registro em 27/10/2026, conteúdo H1–H3 preservado); antes das sessões registrar dados verdadeiros da deliberação |
-| Três investigações e evidências reais | PENDENTE | plano_humano.md, relatorio_template.md; grupo deve executar |
-| Comparação e limitação observada | PARCIAL | limitações técnicas reais em docs/ENGENHARIA_BLOCO02.md; comparação com plano humano acadêmico ainda pendente |
-| Código, instruções e testes | CONCLUÍDO NA PREPARAÇÃO | README.md, agent.py, scripts/af_run.sh, scripts/af_summarize.py, docs/OPERACAO_BLOCO03.md; 53 testes descobertos, 50 passaram, 3 integrações reais ignoradas |
-| Preparação e síntese automatizadas do bloco 03 | CONCLUÍDO COM FIXTURES | tests/test_af_automation.py; aprovação real, restauração real e investigações não executadas nesta preparação |
-| Relatório 4–6 páginas e vídeo até 10 min | PENDENTE | relatorio_template.md, roteiro_video.md; templates apenas |
+| **Laboratório reproduzível (15%)** | **TÉCNICO CONCLUÍDO; revisão final PENDENTE** | Ubuntu KIT11, Docker Rootless, Juice Shop v17.3.0, Ollama/Qwen3 4B, scripts de start/restore com identidade/digest/bindings verificados; registros em `docs/STATE.md` e `docs/OPERACAO_BLOCO03.md`. Restaurações distintas registradas antes das três sessões. Continuidade após reinicialização não verificada. |
+| **Kali e isolamento de rede** | **VERIFICADO NO CAMINHO TESTADO; isolamento absoluto NÃO VERIFICADO** | Kali/OpenVPN → `10.0.80.3:3001`: HTTP 200. Kali sem VPN → WAN `192.168.20.31:3001`: timeout, HTTP 000, curl exit 28 em 27/10/2026 15:04:05 -03, arquivo privado `~/af-wan-sem-vpn.txt` no Kali; capturas pfSense WAN/NAT sem liberação/port forward 3001. Não extrapolar para todos os caminhos ou configurações. |
+| **Agente com seleção dinâmica e >=2 ferramentas (20%)** | **CONCLUÍDO TÉCNICO; revisão de supervisão PENDENTE** | Qwen3 4B local propôs `http_get`, `http_post`, `nmap` nas sessões; o programa registra proposta, avaliação, execução e interpretação por IDs. `docs/investigacoes/INV-01/resumo.md` e demais resumos. Ferramentas/rotas candidatas foram informadas no objetivo; não alegar descoberta autônoma dessas rotas. |
+| **Supervisão / intervenção humana em cada ação** | **NÃO COMPROVADA NAS TRÊS SESSÕES NOVAS** | As decisões por ação e conclusões das sessões novas foram registradas como **delegadas e automatizadas**, distintas da aprovação humana geral de Nicholas. Existe uma sessão interativa interrompida e ensaios anteriores; isso não substitui supervisão humana em cada ação da rubrica. Adaptação relatada como autorizada pelo professor exige validação acadêmica. Ver `docs/OPERACAO_DELEGADA_BLOCO03.md`. |
+| **Plano inicial e três investigações (20%)** | **INVESTIGAÇÕES CONCLUÍDAS TECNICAMENTE; origem/aprovação a documentar** | `plano_humano.md` contém H1–H3, controles, refutação e escopo; grupo declarou aprovação. Dados completos da deliberação e tratamento da exigência “planejar sem LLM” ainda pendentes. INV-01, 02 e 03 realizadas separadamente, cada uma com restauração e logs. |
+| **INV-01 — reconhecimento** | **CONCLUÍDA TECNICAMENTE** | run `01371920529f44c4b11c395bfe367e5e`: GET versão HTTP 200, `17.3.0` (`fe55f482885f488fa472d5f7321970c5`); Nmap TCP/3000 aberta (`45ea687333f0430ea1b19a9d28072980`); GET produto 1 HTTP 200 (`513723cff92e42b2bdf9130c71b3f2f6`). H1 sustentada no escopo medido; não prova vulnerabilidade. |
+| **INV-02 — autenticação** | **CONCLUÍDA TECNICAMENTE** | run `1ae38ffd4ed54a308ec9bd16c5017800`: senha vazia (`c3a3deedc7924c769c1a4635c1cdf47f`) e senha fictícia inválida (`e32b00e3c32744fb82587a270a5c80d2`) retornaram HTTP 401 e corpos idênticos; sem bypass demonstrado. Sem generalização para segurança da autenticação. |
+| **INV-03 — recursos** | **CONCLUÍDA TECNICAMENTE, H3 PARCIAL** | run `6e1489236a7b49e1ac57abcfccdc8347`: GET `/` HTTP 200 (`3fa447a6491141bfa8b20b7390563d19`); `/ftp/` HTTP 200 e listagem de nomes (`41ee9e9701f34ace8b340e8327aca1ec`); negativo com extensão `.txt` HTTP 403 (`ec76542988d04dafa7e046553aa2640b`). Extensão e existência confundidas; sem LFI/RFI ou acesso indevido demonstrado. |
+| **Evidências e interpretação (20%)** | **DOCUMENTADAS TECNICAMENTE; revisão de primárias PENDENTE** | Três sessões principais com 3/3, 2/2 e 3/3 propostas/resultados; JSONL/IDs privados, resumos e `docs/investigacoes/MATRIZ_EVIDENCIAS.md`. Relato de auditoria estrutural sem lacunas. Selecionar capturas e verificar dados sensíveis antes da entrega. |
+| **Análise crítica da IA (20%)** | **RASCUNHO TÉCNICO CONCLUÍDO; revisão acadêmica PENDENTE** | `docs/investigacoes/ANALISE_BLOCO03.md`: truncagem indevidamente tratada como HTML completo; inferências antecipadas; rótulo `ppp` do Nmap confundido com protocolo; descrição incorreta de variável no POST; controle negativo inadequado. Falha do logger separada das falhas do LLM. |
+| **Código, instruções e testes** | **CONCLUÍDO TÉCNICO** | 61 testes descobertos; 58 aprovados e três integrações opt-in ignoradas na execução registrada. Unit tests/fixtures separados de integrações reais. Documentação e scripts no repositório. |
+| **Relatório acadêmico (4–6 páginas)** | **RASCUNHO DISPONÍVEL; NÃO FINALIZADO** | `docs/RELATORIO_ACADEMICO_RASCUNHO.md`: resultados reais, método, IDs e análise crítica; revisar identidade dos participantes, metodologia delegada, evidências privadas e paginação. |
+| **Vídeo (até 10 minutos, 1 investigação completa)** | **PENDENTE** | `roteiro_video.md` ainda requer seleção de material gravado, validação do conteúdo e edição. |
+| **Aceite final pelo grupo/professor** | **PENDENTE** | Conferir a adaptação para operação delegada, o requisito da rubrica de intervenção humana, a origem do planejamento, as conclusões técnicas, as capturas e os entregáveis finais. |
 
-O usuário autorizou a exceção ADR-007 para iniciar o bloco 02 com o bloco 01 parcial. Ensaios de engenharia não substituem as investigações, o planejamento humano nem os entregáveis acadêmicos; não representam garantia de nota.
+## Referências e rastreabilidade
 
-Inspeção visual comunicada em 27/10/2026: regras WAN liberam explicitamente TCP/80, TCP/8000 e UDP/1194; sem permissão explícita TCP/3001 visível. Port Forward anterior mostrava somente 80 e 8000. Essa revisão **não** conclui o isolamento WAN; falta teste de acesso sem VPN e conferência de regras adicionais aplicáveis.
+- Plano: [`plano_humano.md`](plano_humano.md).
+- Execuções: [INV-01](docs/investigacoes/INV-01/resumo.md), [INV-02](docs/investigacoes/INV-02/resumo.md) e [INV-03](docs/investigacoes/INV-03/resumo.md).
+- [Análise crítica](docs/investigacoes/ANALISE_BLOCO03.md) e [matriz de evidências](docs/investigacoes/MATRIZ_EVIDENCIAS.md).
+- [Metodologia de execução delegada](docs/OPERACAO_DELEGADA_BLOCO03.md).
+- [Rubrica](docs/RUBRIC.md) e [estado](docs/STATE.md).
+- Log da primeira tentativa interativa: `logs/INV-01/f13a210f91d4440480f74eceb6b17862/`, preservado com interrupção e **sem conclusão**, não confundido com a principal.
 
-
-<!-- AF-AUTO-INV-01 -->
-Preparação/execução INV-01, run_id `f13a210f91d4440480f74eceb6b17862`: 1 propostas, 1 resultados, 0 conclusões registradas. Lacunas estruturais: 0. PENDENTE de revisão do grupo; contagem não comprova conclusão, isolamento WAN ou correção da IA. Evidências e resumo no diretório privado logs/INV-01/f13a210f91d4440480f74eceb6b17862/.
-<!-- /AF-AUTO-INV-01 -->
+**Princípio:** resultado HTTP, escolha do Qwen, revisão delegada e aceite acadêmico são categorias de evidência diferentes. Nenhum item pendente é automaticamente promovido por contagem de propostas ou por teste automatizado.
