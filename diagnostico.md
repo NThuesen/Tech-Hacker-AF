@@ -1,5 +1,11 @@
 # Diagnóstico do KIT11 — 27/10/2026
 
+## Reavaliação do bloco 01 — 12:29 -03
+
+- **BLOQUEADO:** Docker em rede bridge pode criar regras de firewall e alterar encaminhamento; o usuário proibiu alterações em rede/firewall/NAT sem autorização adicional e pediu interrupção diante de risco aos serviços. Antes de qualquer instalação, `sudo -n iptables -S FORWARD` indicou `ACCEPT` e `sudo -n sysctl net.ipv4.ip_forward` indicou `0`. Nenhuma instalação ou mudança de rede foi feita. Detalhes e pendências em `docs/STATE.md`.
+- **Serviços observados:** Apache escuta em 80/8000; requisições HTTP locais retornaram 200/302. Porta 3000 e API 11434 sem listener. Estes resultados não comprovam todas as funções dos serviços existentes nem isolamento WAN.
+- **Testes:** 10 testes automatizados passaram novamente, com simulações; laboratório real, restauração e acesso Kali permanecem não verificados.
+
 - **PASSOU — ambiente e recursos:** Ubuntu 24.04.1 x86_64, host `kit11-OptiPlex-Micro-7020`; `systemd-detect-virt`: `none`; Intel i5-14500T, 20 CPUs lógicas, 15 GiB RAM (11 GiB disponíveis), 39 GiB livres em `/`, Python 3.12.3. Recursos parecem suficientes, sem garantia de desempenho do modelo.
 - **PASSOU — inventário de rede e conflitos:** `ip -br addr` mostra `enp0s31f6` em `10.0.80.3/24`; `ip route` mostra rota padrão via `10.0.80.1`. `ss -lnt`: 80 e 8000 em uso, 3000 e 11434 sem listener. Endereço privado atual não comprova ausência de roteamento WAN ou regras do pfSense; não se alterou firewall/NAT. Confirme isolamento e rota antes de publicar.
 - **BLOQUEADO — Docker/Juice Shop:** `command -v docker` não retornou caminho; conexão local à 3000 falhou. Não há evidência de execução HTTP real. Instalação administrativa requer aprovação explícita.

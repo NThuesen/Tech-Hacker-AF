@@ -25,13 +25,13 @@ Atualizado em 2026-10-27 após auditoria no Ubuntu do KIT11; o registro de sess�
 | Bloco | Status | Próxima evidência requerida |
 |---|---|---|
 | 00 — Auditoria/sincronização | CONCLUÍDO | auditoria local e comparação com origin registradas abaixo; laboratório real permanece pendente |
-| 01 — Laboratório | NÃO VERIFICADO | Docker, Juice Shop HTTP, Ollama/Qwen, Nmap, restauração, Kali |
+| 01 — Laboratório | BLOQUEADO | resolver impacto do Docker nas regras e confirmar isolamento WAN; Docker, Juice Shop HTTP, Ollama/Qwen, Nmap, restauração e Kali não verificados |
 | 02 — Agente | PARCIAL | código existe; integração real, interpretação pós-resultado e decisões condicionais pendentes |
 | 03 — Investigações | PENDENTE | plano humano e três execuções reais com supervisão |
 | 04 — Entrega | PENDENTE | relatório/roteiro existentes são templates; consolidar evidências reais |
 
 ## Próxima sessão
-Com autorização para o bloco 01, planejar a validação do laboratório; instalações administrativas exigem confirmação específica. **Não executar investigação definitiva antes de `plano_humano.md` aprovado.**
+Bloco 01 autorizado, mas suspenso pelo risco identificado nas regras de rede. Resolver o bloqueio registrado abaixo antes de prosseguir. **Não executar investigação definitiva antes de `plano_humano.md` aprovado.**
 
 ## Registro de sessão — 2026-10-27 12:25 -03
 
@@ -43,3 +43,12 @@ Com autorização para o bloco 01, planejar a validação do laboratório; insta
 - **Riscos priorizados:** (1) Docker, Nmap e Ollama indisponíveis no PATH e integrações reais não verificadas; (2) IP privado e publicação vinculada a ele não garantem isolamento WAN, e impacto do Docker nas regras precisa ser avaliado; (3) `local_ip` comprova IPv4 privado/loopback vinculável ao host, não que o serviço na porta 3000 seja o Juice Shop autorizado; `restore.sh` apaga o container chamado `kit11-juice` após confirmação, sem validar sua identidade; (4) interpretação explícita do último resultado e escolha condicionada por evidências reais permanecem pendentes de verificação; (5) logs podem conter corpos/cabeçalhos sensíveis e `.gitignore` cobre somente `logs/*.jsonl`, não caminhos arbitrários passados por `--log`.
 - **Decisões humanas:** solicitada exclusivamente a auditoria do bloco 00; nenhuma instalação, ação ofensiva, mudança de rede, restauração ou publicação foi autorizada nesta sessão. Nenhuma dessas ações foi realizada.
 - **Próximo passo:** bloco 01 somente após autorização do usuário. Recursos parecem suficientes para iniciar seu planejamento e diagnóstico, sem garantia de desempenho; instalação requer confirmação específica e acesso Kali, isolamento WAN e serviços reais continuam NÃO VERIFICADOS.
+
+## Registro de sessão — 2026-10-27 12:29 -03 — bloco 01
+
+- **Autorização:** usuário autorizou bloco 01, instalações de Docker, Nmap e Ollama, download de Qwen3 4B, testes e commit/push; proibiu alterações em NAT, firewall e rede sem autorização adicional e pediu interrupção diante de risco aos serviços.
+- **BLOQUEADO — rede Docker:** documentação oficial de [Docker e iptables](https://docs.docker.com/engine/network/firewall-iptables/) descreve criação de regras para bridge e possível alteração da política de encaminhamento. `scripts/start.sh` usa publicação de porta na rede padrão. Antes de qualquer alteração, `sudo -n iptables -S FORWARD` retornou política `ACCEPT` e `sudo -n sysctl net.ipv4.ip_forward` retornou `0`. Inicializar Docker padrão pode alterar essas condições e afetar conectividade; instalação e execução foram suspensas. Não foram instalados Docker, Nmap ou Ollama nem baixados modelo ou imagem. Não foi feita mudança em firewall, NAT ou rede.
+- **Isolamento NÃO VERIFICADO:** a interface permanece `10.0.80.3/24`; vincular a esse IP não comprova ausência de encaminhamento WAN no pfSense. A inspeção ou confirmação da configuração existente precisa ocorrer antes da publicação. Docker em modo host não equivale ao script atual: ignora `--publish` e compartilha a rede do host; não foi usado.
+- **Serviços e recursos:** `ss -lntp` identificou Apache nas portas TCP 80 e 8000; `curl --noproxy '*' --max-time 5` para loopback retornou HTTP 200 e 302, respectivamente, antes de instalações. Esses códigos não comprovam todas as funções dos aplicativos. 3000/11434 sem listeners; 39 GiB livres em `/`. `systemctl is-active` registrou apache2, mysql, mariadb e openvpn ativos; Docker e Ollama inativos. Não se verificou a VPN ou pfSense remotamente.
+- **Git e testes:** antes desta atualização, árvore limpa em `main` no commit `2bd57fc`, igual a `origin/main` após `git fetch origin` (`0 0`). `python3 -m unittest discover -s tests -v`: 10 testes passaram; servidor HTTP, modelo e Nmap simulados, sem integrações reais.
+- **PENDENTE:** instalação e versões reais, tag da imagem, HTTP do Juice Shop, modelo e chamada Python, Nmap, restauração em dados descartáveis e teste no Kali. Nenhuma investigação definitiva foi executada. Próximo passo: avaliar com o responsável uma configuração de Docker que não altere as regras existentes e obter confirmação do isolamento WAN; qualquer mudança de rede exige autorização adicional. Não iniciar o bloco 02.
