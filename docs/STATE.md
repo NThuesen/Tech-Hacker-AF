@@ -107,3 +107,8 @@ A preparação do bloco 03 está autorizada e implementada. Próximo passo é pa
 - **Aprovação acadêmica:** o responsável informou que o grupo aprovou o planejamento de `plano_humano.md` antes de iniciar as investigações. Registro declarativo; nomes dos integrantes, data/hora original da deliberação e evidência complementar ainda precisam ser incluídos. A alteração no plano limitou-se ao registro administrativo, mantendo as três hipóteses. Não se afirmou autoria humana original nem execução acadêmica.
 - **WAN (captura de Firewall → Rules → WAN compartilhada na conversa):** regras de permissão exibidas para TCP/80 (WordPress → 10.0.80.3), TCP/8000 (Nextcloud → 10.0.80.3) e UDP/1194 (OpenVPN); regras explícitas de bloqueio para ICMP e grupo de portas TCP. Não aparece regra explícita de permissão para TCP/3001 na captura. Captura anterior de NAT/Port Forward mostrava encaminhamentos TCP/80 e TCP/8000, sem TCP/3001. Esses registros não auditam Floating/1:1 NAT/UPnP/IPv6 nem substituem o teste negativo a partir da WAN sem VPN.
 - **Estado:** aprovação do conteúdo DECLARADA PELO GRUPO; isolamento WAN **PENDENTE**; três investigações reais ainda **PENDENTES**. Nenhuma alteração de configuração, restauração ou execução de agente resultou deste registro.
+
+
+<!-- AF-AUTO-INV-01 -->
+Preparação/execução INV-01, run_id `f13a210f91d4440480f74eceb6b17862`: 1 propostas, 1 resultados, 0 conclusões registradas. Lacunas estruturais: 0. PENDENTE de revisão do grupo; contagem não comprova conclusão, isolamento WAN ou correção da IA. Evidências e resumo no diretório privado logs/INV-01/f13a210f91d4440480f74eceb6b17862/.
+<!-- /AF-AUTO-INV-01 -->

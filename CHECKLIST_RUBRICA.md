@@ -18,3 +18,8 @@
 O usuário autorizou a exceção ADR-007 para iniciar o bloco 02 com o bloco 01 parcial. Ensaios de engenharia não substituem as investigações, o planejamento humano nem os entregáveis acadêmicos; não representam garantia de nota.
 
 Inspeção visual comunicada em 27/10/2026: regras WAN liberam explicitamente TCP/80, TCP/8000 e UDP/1194; sem permissão explícita TCP/3001 visível. Port Forward anterior mostrava somente 80 e 8000. Essa revisão **não** conclui o isolamento WAN; falta teste de acesso sem VPN e conferência de regras adicionais aplicáveis.
+
+
+<!-- AF-AUTO-INV-01 -->
+Preparação/execução INV-01, run_id `f13a210f91d4440480f74eceb6b17862`: 1 propostas, 1 resultados, 0 conclusões registradas. Lacunas estruturais: 0. PENDENTE de revisão do grupo; contagem não comprova conclusão, isolamento WAN ou correção da IA. Evidências e resumo no diretório privado logs/INV-01/f13a210f91d4440480f74eceb6b17862/.
+<!-- /AF-AUTO-INV-01 -->
