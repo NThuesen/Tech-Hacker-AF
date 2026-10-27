@@ -1,0 +1,45 @@
+COMANDO ['ip', '-br', 'addr']
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+enp0s31f6        UP             10.0.80.3/24 fe80::d2c1:b5ff:fe7f:aff9/64 
+
+
+exit=0
+
+COMANDO ['ip', '-4', 'route']
+default via 10.0.80.1 dev enp0s31f6 proto dhcp src 10.0.80.3 metric 100 
+10.0.80.0/24 dev enp0s31f6 proto kernel scope link src 10.0.80.3 metric 100 
+
+
+exit=0
+
+COMANDO ['sysctl', 'net.ipv4.ip_forward']
+net.ipv4.ip_forward = 0
+
+
+exit=0
+
+COMANDO ['ss', '-lnt']
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*          
+LISTEN 0      4096       127.0.0.1:3000       0.0.0.0:*          
+LISTEN 0      4096       127.0.0.1:11434      0.0.0.0:*          
+LISTEN 0      80         127.0.0.1:3306       0.0.0.0:*          
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*          
+LISTEN 0      128        127.0.0.1:44691      0.0.0.0:*          
+LISTEN 0      4096       127.0.0.1:631        0.0.0.0:*          
+LISTEN 0      512        127.0.0.1:42919      0.0.0.0:*          
+LISTEN 0      4096       10.0.80.3:3001       0.0.0.0:*          
+LISTEN 0      4096           [::1]:631           [::]:*          
+LISTEN 0      511                *:80               *:*          
+LISTEN 0      511                *:8000             *:*          
+
+
+exit=0
+
+COMANDO ['systemctl', 'is-active', 'apache2', 'mysql', 'openvpn']
+active
+active
+active
+
+
+exit=0

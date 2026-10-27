@@ -1,0 +1,145 @@
+test_429_stops_even_if_operator_requests_continue (test_af_automation.AutomationTests.test_429_stops_even_if_operator_requests_continue) ... ok
+test_authentication_variants_once_and_no_other_credentials (test_af_automation.AutomationTests.test_authentication_variants_once_and_no_other_credentials) ... ok
+test_guard_blocks_approved_action_before_execution (test_af_automation.AutomationTests.test_guard_blocks_approved_action_before_execution) ... ok
+test_missing_approval_and_interpretation_detected (test_af_automation.AutomationTests.test_missing_approval_and_interpretation_detected) ... ok
+test_pending_wan_stops_before_docker (test_af_automation.AutomationTests.test_pending_wan_stops_before_docker) ... ok
+test_pipe_refused_before_lab (test_af_automation.AutomationTests.test_pipe_refused_before_lab) ... ok
+test_plan_refused_without_any_lab_call (test_af_automation.AutomationTests.test_plan_refused_without_any_lab_call) ... ok
+test_readiness_retries_and_deadline_without_network (test_af_automation.AutomationTests.test_readiness_retries_and_deadline_without_network) ... ok
+test_services_missing_model_refused (test_af_automation.AutomationTests.test_services_missing_model_refused) ... ok
+test_status_update_is_counts_only_in_temporary_repository (test_af_automation.AutomationTests.test_status_update_is_counts_only_in_temporary_repository) ... ok
+test_successful_preparation_fixture_for_all_scenarios (test_af_automation.AutomationTests.test_successful_preparation_fixture_for_all_scenarios) ... ok
+test_summary_refuses_symlink_output_and_duplicate_ids (test_af_automation.AutomationTests.test_summary_refuses_symlink_output_and_duplicate_ids) ... ok
+test_summary_trace_and_fixture_never_updates_status (test_af_automation.AutomationTests.test_summary_trace_and_fixture_never_updates_status) ... ok
+test_get_limit_and_redirect (test_agent.Tests.test_get_limit_and_redirect) ... ok
+test_log_jsonl (test_agent.Tests.test_log_jsonl) ... ok
+test_main_rejection_never_executes (test_agent.Tests.test_main_rejection_never_executes) ... ok
+test_model_history_and_invalid (test_agent.Tests.test_model_history_and_invalid) ... ok
+test_modification_requires_approval (test_agent.Tests.test_modification_requires_approval) ... ok
+test_network_error (test_agent.Tests.test_network_error) ... ok
+test_nmap_command_limited (test_agent.Tests.test_nmap_command_limited) ... ok
+test_post (test_agent.Tests.test_post) ... ok
+test_rejection (test_agent.Tests.test_rejection) ... ok
+test_validation (test_agent.Tests.test_validation) ... ok
+test_academic_mode_requires_explicit_plan_confirmation (test_agent_safety.SafetyTests.test_academic_mode_requires_explicit_plan_confirmation) ... ok
+test_bad_interpretation_stops_next_execution (test_agent_safety.SafetyTests.test_bad_interpretation_stops_next_execution) ... ok
+test_eof_does_not_fabricate_decision (test_agent_safety.SafetyTests.test_eof_does_not_fabricate_decision) ... ok
+test_history_is_bounded_and_keeps_latest (test_agent_safety.SafetyTests.test_history_is_bounded_and_keeps_latest) ... ok
+test_interpretation_must_match_result (test_agent_safety.SafetyTests.test_interpretation_must_match_result) ... ok
+test_invalid_modification_requires_valid_review (test_agent_safety.SafetyTests.test_invalid_modification_requires_valid_review) ... ok
+test_large_http_evidence_is_marked_and_not_silently_dropped (test_agent_safety.SafetyTests.test_large_http_evidence_is_marked_and_not_silently_dropped) ... ok
+test_last_result_is_interpreted_before_stop (test_agent_safety.SafetyTests.test_last_result_is_interpreted_before_stop) ... ok
+test_log_failure_prevents_tool_execution (test_agent_safety.SafetyTests.test_log_failure_prevents_tool_execution) ... ok
+test_malformed_model_envelopes (test_agent_safety.SafetyTests.test_malformed_model_envelopes) ... ok
+test_modified_approved_executes_only_final_action (test_agent_safety.SafetyTests.test_modified_approved_executes_only_final_action) ... ok
+test_modified_rejected_never_executes (test_agent_safety.SafetyTests.test_modified_rejected_never_executes) ... ok
+test_paths_and_targets_fail_before_io (test_agent_safety.SafetyTests.test_paths_and_targets_fail_before_io) ... ok
+test_permissive_existing_log_is_rejected (test_agent_safety.SafetyTests.test_permissive_existing_log_is_rejected) ... ok
+test_private_logs_redact_and_reject_links (test_agent_safety.SafetyTests.test_private_logs_redact_and_reject_links) ... ok
+test_proposal_budget_limits_rejections (test_agent_safety.SafetyTests.test_proposal_budget_limits_rejections) ... ok
+test_shared_log_directory_is_rejected (test_agent_safety.SafetyTests.test_shared_log_directory_is_rejected) ... ok
+test_slow_http_has_total_deadline (test_agent_safety.SafetyTests.test_slow_http_has_total_deadline) ... ok
+test_strict_json_and_body (test_agent_safety.SafetyTests.test_strict_json_and_body) ... ok
+test_channel_no_default_approval_and_wrong_request_rejected (test_delegated.DelegatedTests.test_channel_no_default_approval_and_wrong_request_rejected) ... {
+  "hipotese": "FIXTURE H1",
+  "interpretacao": "MOCK",
+  "ferramenta": "http_get",
+  "parametros": {
+    "path": "/"
+  }
+}
+{
+  "status": 200
+}
+{
+  "resultado_id": "59086efe30d846638f4965dbf3196b21",
+  "interpretacao": "MOCK resposta",
+  "limitacoes": "MOCK n\u00e3o comprova vulnerabilidade"
+}
+INV-02: plano_humano.md SHA256=2e0de179e41dee61b851344dc1ed819596196b59cabd8d7e5a3a0a621c25f3fb; código=fixture-commit
+A aprovação deve ser deliberada pelo grupo antes da primeira consulta ao Qwen. Confirmar autoria/uso de LLM com o professor conforme o plano; não reconstituir uma autoria fictícia.
+INV-01: plano_humano.md SHA256=2e0de179e41dee61b851344dc1ed819596196b59cabd8d7e5a3a0a621c25f3fb; código=fixture-commit
+A aprovação deve ser deliberada pelo grupo antes da primeira consulta ao Qwen. Confirmar autoria/uso de LLM com o professor conforme o plano; não reconstituir uma autoria fictícia.
+INV-01: plano_humano.md SHA256=2e0de179e41dee61b851344dc1ed819596196b59cabd8d7e5a3a0a621c25f3fb; código=fixture-commit
+A aprovação deve ser deliberada pelo grupo antes da primeira consulta ao Qwen. Confirmar autoria/uso de LLM com o professor conforme o plano; não reconstituir uma autoria fictícia.
+Estado inicial conhecido exige restauração. Cancelar preserva o container e encerra a preparação.
+INV-02: plano_humano.md SHA256=2e0de179e41dee61b851344dc1ed819596196b59cabd8d7e5a3a0a621c25f3fb; código=fixture-commit
+A aprovação deve ser deliberada pelo grupo antes da primeira consulta ao Qwen. Confirmar autoria/uso de LLM com o professor conforme o plano; não reconstituir uma autoria fictícia.
+Estado inicial conhecido exige restauração. Cancelar preserva o container e encerra a preparação.
+INV-03: plano_humano.md SHA256=2e0de179e41dee61b851344dc1ed819596196b59cabd8d7e5a3a0a621c25f3fb; código=fixture-commit
+A aprovação deve ser deliberada pelo grupo antes da primeira consulta ao Qwen. Confirmar autoria/uso de LLM com o professor conforme o plano; não reconstituir uma autoria fictícia.
+Estado inicial conhecido exige restauração. Cancelar preserva o container e encerra a preparação.
+{
+  "hipotese": "FIXTURE H1",
+  "interpretacao": "MOCK",
+  "ferramenta": "http_get",
+  "parametros": {
+    "path": "/"
+  }
+}
+{
+  "status": 200
+}
+{
+  "resultado_id": "4c68a517351247d4b65aa7210e9792f8",
+  "interpretacao": "MOCK resposta",
+  "limitacoes": "MOCK n\u00e3o comprova vulnerabilidade"
+}
+{
+  "hipotese": "FIXTURE H1",
+  "interpretacao": "MOCK",
+  "ferramenta": "http_get",
+  "parametros": {
+    "path": "/"
+  }
+}
+{
+  "status": 200
+}
+{
+  "resultado_id": "1abb64633cdc4e2fa6760bb7fcc5b436",
+  "interpretacao": "MOCK resposta",
+  "limitacoes": "MOCK n\u00e3o comprova vulnerabilidade"
+}
+{
+  "hipotese": "teste",
+  "interpretacao": "sem evid\u00eancia",
+  "ferramenta": "http_get",
+  "parametros": {
+    "path": "/novo"
+  }
+}
+{
+  "hipotese": "teste",
+  "interpretacao": "sem evid\u00eancia",
+  "ferramenta": "http_get",
+  "parametros": {
+    "path": "/novo"
+  }
+}
+REVISAO proposta 0b869a002c95442abcc6a6ed23003abb
+REVISAO proposta 0e7f42d98a04414392f03e35be896cf4
+ok
+test_delegated_decision_is_not_human_and_review_reaches_next_model_call (test_delegated.DelegatedTests.test_delegated_decision_is_not_human_and_review_reaches_next_model_call) ... ok
+test_modified_action_executes_after_second_review_with_channel_metadata (test_delegated.DelegatedTests.test_modified_action_executes_after_second_review_with_channel_metadata) ... ok
+test_modified_action_requires_matching_second_approval (test_delegated.DelegatedTests.test_modified_action_requires_matching_second_approval) ... ok
+test_scope_and_identity_guards (test_delegated.DelegatedTests.test_scope_and_identity_guards) ... ok
+test_sensitive_or_blocked_result_stops (test_delegated.DelegatedTests.test_sensitive_or_blocked_result_stops) ... ok
+test_sensitive_response_never_reaches_model_interpretation (test_delegated.DelegatedTests.test_sensitive_response_never_reaches_model_interpretation) ... ok
+test_wrong_approval_cannot_execute (test_delegated.DelegatedTests.test_wrong_approval_cannot_execute) ... ok
+test_different_real_evidence_changes_next_proposal (test_engineering_real.RealEngineeringTests.test_different_real_evidence_changes_next_proposal) ... skipped 'integração real opt-in'
+test_large_real_http_result_uses_bounded_context (test_engineering_real.RealEngineeringTests.test_large_real_http_result_uses_bounded_context) ... skipped 'integração real opt-in'
+test_model_proposal_execution_and_interpretation (test_engineering_real.RealEngineeringTests.test_model_proposal_execution_and_interpretation) ... skipped 'integração real opt-in'
+test_arbitrary_bind_argument_is_refused_before_docker (test_lab_scripts.LabScriptTests.test_arbitrary_bind_argument_is_refused_before_docker) ... ok
+test_replaced_container_during_confirmation_is_not_removed (test_lab_scripts.LabScriptTests.test_replaced_container_during_confirmation_is_not_removed) ... ok
+test_restore_cancelled_never_removes (test_lab_scripts.LabScriptTests.test_restore_cancelled_never_removes) ... ok
+test_restore_recreates_only_verified_id_with_same_bindings (test_lab_scripts.LabScriptTests.test_restore_recreates_only_verified_id_with_same_bindings) ... ok
+test_restore_refuses_wrong_identity_or_bindings (test_lab_scripts.LabScriptTests.test_restore_refuses_wrong_identity_or_bindings) ... ok
+test_rootful_daemon_and_missing_container_are_refused (test_lab_scripts.LabScriptTests.test_rootful_daemon_and_missing_container_are_refused) ... ok
+test_start_preserves_existing_container (test_lab_scripts.LabScriptTests.test_start_preserves_existing_container) ... ok
+test_start_uses_two_fixed_bindings_and_rootless_socket (test_lab_scripts.LabScriptTests.test_start_uses_two_fixed_bindings_and_rootless_socket) ... ok
+
+----------------------------------------------------------------------
+Ran 61 tests in 4.057s
+
+OK (skipped=3)

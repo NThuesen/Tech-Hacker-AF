@@ -1,0 +1,47 @@
+[
+  {
+    "investigacao": "INV-01",
+    "run_id": "f13a210f91d4440480f74eceb6b17862",
+    "estado": "INTERROMPIDA original",
+    "eventos": 16,
+    "propostas": 1,
+    "resultados": 1,
+    "lacunas_audit": []
+  },
+  {
+    "investigacao": "INV-01",
+    "run_id": "caf9a707aed04d7e85436ec627fe1dc6",
+    "estado": "PARCIAL erro integração",
+    "eventos": 23,
+    "propostas": 3,
+    "resultados": 1,
+    "lacunas_audit": []
+  },
+  {
+    "investigacao": "INV-01",
+    "run_id": "01371920529f44c4b11c395bfe367e5e",
+    "estado": "ENCERRADA técnica",
+    "eventos": 33,
+    "propostas": 3,
+    "resultados": 3,
+    "lacunas_audit": []
+  },
+  {
+    "investigacao": "INV-02",
+    "run_id": "1ae38ffd4ed54a308ec9bd16c5017800",
+    "estado": "ENCERRADA técnica",
+    "eventos": 25,
+    "propostas": 2,
+    "resultados": 2,
+    "lacunas_audit": []
+  },
+  {
+    "investigacao": "INV-03",
+    "run_id": "6e1489236a7b49e1ac57abcfccdc8347",
+    "estado": "ENCERRADA técnica",
+    "eventos": 33,
+    "propostas": 3,
+    "resultados": 3,
+    "lacunas_audit": []
+  }
+]
