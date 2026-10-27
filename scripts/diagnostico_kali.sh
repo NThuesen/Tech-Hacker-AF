@@ -6,4 +6,4 @@ cat /etc/os-release | head -6
 ip -br addr
 ip route get "$IP"
 command -v nmap || true
-curl --noproxy '*' --max-time 5 -sS -o /dev/null -w 'Juice Shop HTTP: %{http_code}\n' "http://$IP:3000/"
+curl --noproxy '*' --max-time 5 -sS -o /dev/null -w 'Juice Shop HTTP: %{http_code}\n' "http://$IP:3001/"

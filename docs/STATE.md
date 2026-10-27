@@ -1,11 +1,11 @@
 # Estado atual e handoff
 
-Atualizado em 2026-10-27 após os ensaios técnicos do bloco 02 no Ubuntu do KIT11; registros anteriores são históricos.
+Atualizado em 2026-10-27 após manutenção dos scripts para os dois endpoints autorizados; registros anteriores são históricos.
 
 ## Código local — atualizado no bloco 02
 - `agent.py`: Python sem dependências externas, API Ollama em loopback, ferramentas `nmap`, `http_get` e `http_post`, confirmação humana, execução restrita ao IP local parametrizado e logs JSONL.
 - `tests/test_agent.py` e `tests/test_agent_safety.py`: 29 testes locais com fixtures/mocks identificados. `tests/test_engineering_real.py`: três integrações reais opt-in, registradas separadamente.
-- `scripts/start.sh` / `scripts/restore.sh`: Juice Shop `bkimminich/juice-shop:v17.3.0` no IP privado informado, restauração por remoção/criação de container.
+- `scripts/start.sh` / `scripts/restore.sh` / `scripts/lab_common.sh`: imagem fixa e digest validado, Docker Rootless local, bindings `127.0.0.1:3000` e `10.0.80.3:3001` para porta interna 3000; identidade verificada antes de restaurar. `tests/test_lab_scripts.py`: oito testes com Docker simulado, sem remoção de containers reais.
 - `README.md`, `diagnostico.md`, `PENDENCIAS.md`, `CHECKLIST_RUBRICA.md`, `docs/requisitos.md`, `plano_humano.md`, `relatorio_template.md`, `roteiro_video.md`.
 - Docker Rootless, Nmap, Ollama/Qwen e HTTP local foram verificados; os registros dos blocos 01 e 02 distinguem resultados reais e simulações.
 
@@ -19,13 +19,13 @@ Atualizado em 2026-10-27 após os ensaios técnicos do bloco 02 no Ubuntu do KIT
 1. Interpretação explícita de cada resultado implementada, com IDs e decisão posterior. Uma falha de interpretação gera pendência e encerra o ciclo; não há recuperação automática.
 2. Adaptação condicional observada com Qwen real após delimitar o objetivo técnico; a tentativa inicial com objetivo genérico produziu ações idênticas. O modelo ainda pode generalizar indevidamente ou interpretar mal respostas.
 3. POST mantém corpo JSON validado e sem cabeçalhos/cookies arbitrários. Teste de autenticação real e adequação à investigação escolhida dependem do plano acadêmico do grupo.
-4. Restauração e Ollama locais foram verificados; acesso Kali, isolamento WAN e continuidade após logout/reinicialização continuam pendentes do bloco 01. Log privado não substitui revisão antes de compartilhar.
+4. Restauração e Ollama locais foram verificados; acesso Kali pela VPN confirmado pelo usuário com HTTP 200 em `10.0.80.3:3001`. Isolamento WAN e continuidade após logout/reinicialização continuam pendentes do bloco 01. Log privado não substitui revisão antes de compartilhar.
 
 ## Estado dos blocos
 | Bloco | Status | Próxima evidência requerida |
 |---|---|---|
 | 00 — Auditoria/sincronização | CONCLUÍDO | auditoria local e comparação com origin registradas abaixo; laboratório real permanece pendente |
-| 01 — Laboratório | PARCIAL | laboratório local validado; acesso Kali por conexão já autorizada e isolamento WAN permanecem pendentes |
+| 01 — Laboratório | PARCIAL | dois endpoints verificados no Ubuntu; Kali/VPN confirmado pelo usuário com HTTP 200; isolamento WAN e retomada após logout/reinicialização pendentes |
 | 02 — Agente | CONCLUÍDO | implementação e ensaios de engenharia verificados; limitações do LLM registradas; exceção de dependência ADR-007 |
 | 03 — Investigações | PENDENTE | plano humano e três execuções reais com supervisão |
 | 04 — Entrega | PENDENTE | relatório/roteiro existentes são templates; consolidar evidências reais |
@@ -78,3 +78,15 @@ Aguardar autorização para o bloco 03 e planejamento acadêmico preenchido/apro
 - **Rastreabilidade:** comandos, resultados, IDs, limites e distinção entre engenharia e avaliação em `docs/ENGENHARIA_BLOCO02.md`. Alterados `agent.py`, `.gitignore`, testes e documentação de estado/arquitetura/rubrica/operação. Nenhum plano acadêmico produzido ou aprovado pelo Codex; nenhuma investigação definitiva executada.
 - **Verificação final às 13:08 -03:** `python3 -m unittest discover -s tests -v` descobriu 32 testes: 29 passaram e três integrações reais foram ignoradas por padrão (executadas separadamente acima); `git diff --check` passou. IP/rota e `ip_forward=0` preservados nas leituras atuais; portas 3000/11434 apenas em loopback, sem TCP/22. Apache/mysql/openvpn ativos, Docker de sistema inativo; HTTP 80=200, 8000=302, 3000=200. Logs locais 0700/0600 confirmados e ignorados pelo Git.
 - **Pendências:** resolver conectividade Kali e demais pendências do bloco 01 quando autorizado; grupo elaborar/aprovar o plano e autorizar bloco 03 antes de ensaios acadêmicos. Autenticação real via POST não foi exercitada; cabeçalhos/cookies não foram ampliados sem necessidade demonstrada.
+
+## Registro de sessão — 2026-10-27 14:31–14:36 -03 — manutenção dos scripts
+
+- **Solicitação:** preservar os endpoints já funcionais `127.0.0.1:3000` (Ubuntu/agente) e `10.0.80.3:3001` (Kali/OpenVPN), ambos para porta interna 3000, com Docker Rootless; verificar identidade antes de remoção; atualizar documentação e fazer commit/push. Não é avanço para o bloco 03.
+- **Estado real inicial:** árvore limpa em `bc0505d`, igual a `origin/main` após `git fetch origin` (`0 0`). Container `kit11-juice`, ID `4275d9e2af7f229af38e79fdadc0b35d87f5283d03db96af28a362ce3662b7a6`, já possuía os dois bindings exatos, sem mounts; imagem `bkimminich/juice-shop:v17.3.0`, ID/digest `sha256:123acb31ed8bb05ebb06934a29be83d4e11a46cae937b9ed2bf2bda29d98130a`. Contexto Rootless e serviço Docker do usuário ativos, Docker de sistema inativo.
+- **Mudanças:** `start.sh` e `restore.sh` compartilham `lab_common.sh`, fixando os dois endpoints, socket Rootless local e imagem/digest validados. Antes de remover, a restauração valida nome, ID, imagem, rótulos, bindings e ausência de mounts/privilégios extras; reinspeciona após a confirmação e usa o ID imutável. Divergências, container ausente, daemon sem Rootless ou troca de ID impedem a remoção. Scripts funcionam a partir de outro diretório e não iniciam daemons nem baixam imagens. `diagnostico_kali.sh` foi alinhado à porta 3001. README, arquitetura, decisões e checklist refletem a configuração atual (ADR-009/010).
+- **Endpoints reais:** `curl --noproxy '*' --max-time 5` executado no Ubuntu retornou HTTP 200 em `http://127.0.0.1:3000/` e `http://10.0.80.3:3001/`, antes e depois. `ss` confirmou esses bindings e Ollama somente em `127.0.0.1:11434`. O agente continua exclusivamente em `127.0.0.1:3000`.
+- **Kali/VPN CONFIRMADO:** usuário informou sucesso de HTTP 200 no Kali pela VPN em `http://10.0.80.3:3001/` e solicitou seu registro. Origem da confirmação: relato do usuário nesta conversa; não houve acesso nem nova execução de comando pelo Codex no notebook/Kali.
+- **Proteção do container real:** `start.sh` reconheceu o container existente e recusou substituí-lo (status 1 esperado). `restore.sh` validou sua identidade e foi cancelado na confirmação (status 1 esperado), sem remoção. ID e bindings permaneceram iguais. A criação e a remoção/recriação pelos novos scripts foram verificadas com Docker simulado nos testes; não foi feita nova restauração destrutiva do container em uso.
+- **Testes:** `python3 -m unittest discover -s tests -v`: 40 descobertos, 37 passaram e três integrações Ollama opt-in ignoradas; oito testes novos usam fixtures explícitas para Docker/endereço e cobrem bindings, socket Rootless, recusa de imagem/configuração erradas, cancelamento, troca de ID e remoção somente por ID validado. `sh -n` nos quatro scripts shell e `git diff --check` passaram.
+- **Serviços e rede preservados:** Apache/mysql/openvpn continuaram ativos; HTTP existente 80=200 e 8000=302 antes/depois; `ip_forward=0` e rota via `10.0.80.1` observados. Nenhuma alteração de firewall, NAT, pfSense, OpenVPN ou daemon/configuração Rootless; nenhum container real removido/recriado nesta manutenção.
+- **PENDENTE:** verificação suficiente do isolamento WAN; HTTP pela VPN e bind em IP privado não a comprovam. Retomada após logout/reinicialização continua não verificada. Sem investigações definitivas ou avanço de bloco.

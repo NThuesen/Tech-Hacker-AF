@@ -4,23 +4,26 @@ Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requ
 
 ## Preparação
 
-Python 3.10+ usa apenas biblioteca padrão (`requirements.txt`). O ambiente observado e suas limitações estão em `docs/STATE.md`. No KIT11, o Docker Rootless está instalado em `/home/kit11/.local/opt/kit11-docker`; use seu contexto `rootless` e mantenha a API Ollama em 127.0.0.1:11434. O usuário autorizou inicialmente apenas Juice Shop em loopback: não publique em outro IP sem autorização e sem verificar o isolamento WAN. Não altere pfSense, VPN, NAT ou firewall.
+Python 3.10+ usa apenas biblioteca padrão (`requirements.txt`). O ambiente observado e suas limitações estão em `docs/STATE.md`. No KIT11, o Docker Rootless está instalado em `/home/kit11/.local/opt/kit11-docker`. A configuração autorizada publica a porta interna 3000 do Juice Shop em **127.0.0.1:3000 para Ubuntu/agente** e **10.0.80.3:3001 para Kali/OpenVPN**. Ollama permanece apenas em 127.0.0.1:11434. A verificação de isolamento WAN está pendente; não altere pfSense, VPN, NAT ou firewall.
 
 Na raiz, após confirmar que o daemon Rootless e a API Ollama estão ativos:
 
 ```sh
 export PATH="/home/kit11/.local/opt/kit11-docker:$PATH"
 export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
-./scripts/start.sh 127.0.0.1
+./scripts/start.sh
 curl --noproxy '*' --max-time 5 -i http://127.0.0.1:3000/
+curl --noproxy '*' --max-time 5 -i http://10.0.80.3:3001/
 python3 agent.py --ip 127.0.0.1 --log logs/investigacao1.jsonl
 ```
 
-O script de início recusa substituir um container existente. Se o `kit11-juice` já existe, confira-o com `docker ps -a` antes de decidir como retomá-lo. Os serviços do usuário estão habilitados, mas `Linger=no`; o container usa `--restart no`, portanto não há garantia de retomada após logout ou reinicialização.
+Os scripts usam explicitamente o socket Rootless local `/run/user/UID/docker.sock`, verificam o modo Rootless e o digest da imagem local, sem iniciar daemons ou baixar imagens automaticamente. A configuração compartilhada fica em `scripts/lab_common.sh`; os dois bindings são fixos. O argumento legado opcional `127.0.0.1` continua aceito, mas não muda os bindings; outros argumentos de IP são recusados.
 
-O IP deve estar vinculado ao próprio Ubuntu; o agente usa apenas esse IPv4 e TCP/3000. O container fixa `bkimminich/juice-shop:v17.3.0`, não compartilha volumes e é publicado apenas no IP informado. O teste a partir do Kali permanece pendente: loopback não é diretamente acessível pela rede; um túnel SSH exige conexão previamente autorizada e ainda não verificada. Para verificação técnica isolada sem investigação, teste a API local manualmente, por exemplo `curl --noproxy '*' http://127.0.0.1:11434/api/generate -d '{"model":"qwen3:4b-instruct","prompt":"Responda JSON com ok true","format":"json","stream":false}'`.
+O script de início verifica a identidade de um container existente e recusa substituí-lo. Os serviços do usuário estão habilitados, mas `Linger=no`; o container usa `--restart no`, portanto não há garantia de retomada após logout ou reinicialização. A imagem é `bkimminich/juice-shop:v17.3.0`, com digest validado `sha256:123acb31ed8bb05ebb06934a29be83d4e11a46cae937b9ed2bf2bda29d98130a`, sem volumes. Ambos os IPs devem estar vinculados ao Ubuntu.
 
-Se houver uma conexão SSH já autorizada até o KIT11 com encaminhamento permitido, no Kali pode-se usar `ssh -N -L 127.0.0.1:3000:127.0.0.1:3000 USUARIO@HOST_AUTORIZADO` e acessar `http://127.0.0.1:3000/` no próprio Kali. Substitua os campos pela conexão conhecida; ela não foi identificada nem testada nesta sessão. Não habilite SSH ou altere regras para criá-la sem autorização.
+O acesso do Kali pela VPN a `http://10.0.80.3:3001/` foi confirmado pelo usuário com HTTP 200. As verificações executadas pelo Codex nesta sessão partiram do Ubuntu e também retornaram 200 nos dois endpoints; não representam uma nova execução no Kali. Não é necessário habilitar SSH. Para repetir a checagem no próprio Kali conectado à VPN: `curl --noproxy '*' --max-time 5 -i http://10.0.80.3:3001/` ou `./scripts/diagnostico_kali.sh 10.0.80.3`.
+
+Para verificação técnica isolada do modelo, sem investigação: `curl --noproxy '*' http://127.0.0.1:11434/api/generate -d '{"model":"qwen3:4b-instruct","prompt":"Responda JSON com ok true","format":"json","stream":false}'`.
 
 ## Operação e limites
 
@@ -34,7 +37,7 @@ Para ensaio técnico interativo, use `python3 agent.py --engenharia --ip 127.0.0
 
 ## Restauração
 
-`./scripts/restore.sh 127.0.0.1` exige digitar `RESTAURAR`, remove o container chamado `kit11-juice` e o recria sem volumes; apaga dados e alterações nesse container. Confirme sua identidade antes de executar. Não restaura serviços externos. O teste com marcador descartável está registrado em `docs/STATE.md`.
+`./scripts/restore.sh` exige digitar `RESTAURAR` e apaga os dados do container reconhecido. Antes de qualquer remoção, verifica nome, ID, digest, referência e rótulos da imagem, ausência de mounts/privilégios extras e os dois bindings esperados. Após a confirmação, reinspeciona e recusa se o ID mudou; remove pelo ID verificado e recria com ambos os endpoints. Divergências ou container ausente encerram a operação sem remoção. Não restaura serviços externos. A restauração real anterior com marcador descartável e os testes atuais com Docker simulado estão separados em `docs/STATE.md`.
 
 ## Testes
 

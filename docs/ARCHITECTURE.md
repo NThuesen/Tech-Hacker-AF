@@ -2,10 +2,12 @@
 
 ## Fluxo lógico
 ```text
-Notebook pessoal: Kali VM ──(SSH já autorizado, se existir; PENDENTE)──> KIT11
+Notebook pessoal: Kali VM ──(OpenVPN existente)──> 10.0.80.3:3001
 
 KIT11 físico: Ubuntu 10.0.80.3 (rede existente preservada)
-  ├── Docker Rootless: OWASP Juice Shop (único alvo, 127.0.0.1:3000)
+  ├── Docker Rootless: OWASP Juice Shop (porta interna 3000)
+  │    ├── 127.0.0.1:3000 — Ubuntu/agente
+  │    └── 10.0.80.3:3001 — Kali/OpenVPN
   ├── Ollama (API apenas loopback; modelo quantizado local)
   └── Python: agente acadêmico supervisionado
        objetivo -> LLM propõe tool + args -> validação/consentimento humano
@@ -15,7 +17,7 @@ KIT11 físico: Ubuntu 10.0.80.3 (rede existente preservada)
 
 ## Limites obrigatórios
 - Não alterar regras pfSense/NAT, OpenVPN, WordPress/Nextcloud, nem encaminhar a porta 3000 para a WAN.
-- Bind do Juice Shop e alvo do CLI fixos em `127.0.0.1:3000` por autorização atual (ADR-006). Acesso Kali continua pendente; não habilitar SSH nem publicar na interface privada por conveniência.
+- Bind local e alvo do CLI fixos em `127.0.0.1:3000`; segundo bind autorizado em `10.0.80.3:3001` (ADR-009). Kali/VPN confirmado pelo usuário com HTTP 200; isolamento WAN pendente. Não habilitar SSH nem modificar firewall/NAT/VPN.
 - Ollama na interface local (`127.0.0.1:11434`) para não expor o LLM na rede. Python conecta por loopback; não é necessário abrir sua API para Kali.
 - Instalação do Docker pode alterar regras iptables/nftables; observar rotas e serviços antes/depois. Não modificar firewall sem autorização.
 - Não executar Nmap indiscriminado na sub-rede: destino único explicitamente configurado para o Juice Shop; selecionar opções e portas permitidas.

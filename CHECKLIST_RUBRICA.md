@@ -2,8 +2,8 @@
 
 | Requisito | Estado | Arquivo/evidência |
 |---|---|---|
-| Diagnóstico do Ubuntu e topologia local | CONCLUÍDO | diagnostico.md; rota Kali e isolamento WAN pendentes |
-| Juice Shop local e acesso Kali | PARCIAL | Docker Rootless e HTTP real em loopback verificados; Kali/WAN pendentes no bloco 01 |
+| Diagnóstico do Ubuntu e topologia local | CONCLUÍDO | diagnostico.md e docs/STATE.md; acesso Kali/VPN confirmado pelo usuário; isolamento WAN pendente |
+| Juice Shop local e acesso Kali | PARCIAL | HTTP real 200 em 127.0.0.1:3000 e 10.0.80.3:3001 pelo Ubuntu; Kali/VPN confirmado pelo usuário com HTTP 200; isolamento WAN pendente |
 | LLM local e chamada JSON real | CONCLUÍDO | Ollama/Qwen3 4B real; docs/STATE.md e docs/ENGENHARIA_BLOCO02.md |
 | Agente com escolha dinâmica e ferramentas | CONCLUÍDO EM ENGENHARIA | GET e Nmap reais; propostas diferentes após HTTP 200/404 sob objetivo delimitado; tentativa inicial falhou e foi preservada |
 | Aprovação, alteração e rejeição | CONCLUÍDO EM ENGENHARIA | rejeição e segunda aprovação testadas com fixtures; modificação, segunda aprovação e rejeição de inferência reais pelo usuário via conversa |
