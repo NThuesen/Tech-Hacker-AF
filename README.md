@@ -54,4 +54,11 @@ cd /home/kit11/Kit11-AF
 ./scripts/af_run.sh INV-03
 ```
 
-Cada comando é independente: não executar a lista como lote. O script interrompe sem aprovação explícita do plano, evidências atuais Kali/WAN, restauração confirmada e preflight válido. O isolamento WAN permanece PENDENTE até comprovação pelo grupo. Nenhuma investigação acadêmica foi realizada na preparação destes scripts.
+Cada comando é independente: não executar a lista como lote. O script interrompe sem aprovação explícita do plano, evidências atuais Kali/WAN, restauração confirmada e preflight válido. Antes da execução, o grupo deve registrar evidência WAN com alcance explícito; bind privado não demonstra isolamento absoluto. A preparação inicial usou fixtures; os resultados reais posteriores estão na análise vinculada abaixo.
+
+
+### Operação delegada autorizada no Bloco 03
+
+Nicholas autorizou operação pelo Codex por dificuldade de entrada no terminal. O modo original acima permanece disponível. O modo delegado é iniciado com `python3 scripts/af_delegated.py INV-01 --autorizacao-nicholas 'referência explícita à autorização'`; exige Codex ativo revisando cada proposta pelo canal privado, sem sequência fixa de aprovações. Decisões delegadas são registradas separadamente das autorizações humanas.
+
+Critérios e comandos em [operação delegada](docs/OPERACAO_DELEGADA_BLOCO03.md). Resultados reais, limitações, resumos individuais e matriz em [análise do Bloco 03](docs/investigacoes/ANALISE_BLOCO03.md). As três execuções técnicas terminaram; revisão acadêmica humana permanece pendente. WAN: bloqueio no caminho testado conforme evidência relatada por Nicholas, sem comprovação de isolamento absoluto. Bloco 04 não iniciado.

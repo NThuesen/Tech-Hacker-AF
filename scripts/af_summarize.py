@@ -61,14 +61,25 @@ def audit(events):
     """Checagem estrutural, sem transformar declaração humana em prova externa."""
     issues = []
     proposals, approvals, results, interpretations = {}, {}, {}, set()
-    executions = {}
+    executions, modifications, confirmations = {}, {}, {}
     for e in events:
         kind, pid = e['evento'], e.get('proposal_id')
         if kind == 'proposta':
             proposals[pid] = e
-        elif kind == 'decisao_humana':
+        elif kind == 'modificacao_validada':
+            modifications[pid] = e.get('acao_modificada')
+        elif kind == 'confirmacao_modificacao_delegada':
+            confirmations[pid] = e.get('acao_final')
+        elif kind in ('decisao_humana', 'decisao_delegada'):
             if pid not in proposals:
                 issues.append('decisão sem proposta anterior: ' + e['event_id'])
+            if kind == 'decisao_delegada':
+                if e.get('origem') != 'codex_delegado' or not e.get('justificativa'):
+                    issues.append('decisão delegada sem origem/justificativa: ' + e['event_id'])
+                if e.get('decisao') == 'modificada_aprovada' and (
+                        modifications.get(pid) != e.get('acao_final')
+                        or confirmations.get(pid) != e.get('acao_final')):
+                    issues.append('modificação delegada sem validação/segunda aprovação: ' + e['event_id'])
             if e.get('decisao') in ('aprovada', 'modificada_aprovada'):
                 approvals[pid] = e
         elif kind == 'execucao':
@@ -147,7 +158,8 @@ def summarize(path):
              'Corpos HTTP e saídas Nmap completos e limitados estão no JSONL privado.', '',
              '| Evento / ID | Conteúdo registrado (origem preservada) |', '|---|---|']
     relevant = {'aprovacao_plano', 'portao_rede', 'preflight', 'restauracao', 'pronto',
-                'decisao_humana', 'modificacao_validada', 'modificacao_invalida', 'resultado',
+                'decisao_humana', 'decisao_delegada', 'conclusao_delegada', 'autorizacao_delegacao',
+                'confirmacao_modificacao_delegada', 'modificacao_validada', 'modificacao_invalida', 'resultado',
                 'interpretacao', 'decisao_pos_interpretacao', 'conclusao_humana',
                 'erro_modelo', 'erro_interpretacao', 'interrompida',
                 'acao_bloqueada', 'parada_seguranca',
@@ -166,7 +178,7 @@ def summarize(path):
              'Erros técnicos efetivamente registrados: ' + str(sum(e['evento'] in ('erro_modelo', 'erro_interpretacao') for e in events)) + '.',
              'Inferências incorretas: classificação depende da avaliação humana registrada após interpretação; '
              'não deduzir erro, adaptação útil, vulnerabilidade ou ausência de falhas automaticamente.',
-             'Conclusão: consultar conclusao_humana acima; se ausente, PENDENTE. '
+             'Conclusão: consultar conclusao_humana ou conclusao_delegada acima; se ausente, PENDENTE. Decisão Codex não é decisão humana. '
              'A sequência de propostas/intervenções e os resultados permitem ao grupo comparar decisões sucessivas; '
              'causalidade e correção exigem análise humana.', '',
              'Integridade estrutural: ' + ('; '.join(map(cell, issues)) if issues else 'sem lacunas detectadas nos vínculos checados; não atesta autenticidade.'), '',

@@ -294,9 +294,9 @@ def human_text(prompt, input_fn):
 
 
 def run_session(objective, host, path, input_fn=None, engineering=False, plan_confirmed=False,
-                investigation_id=None, run_id=None, max_actions=None, action_guard=None):
-    """Fluxo interativo: não há aprovação automática, inclusive em engenharia."""
-    input_source = 'entrada_injetada_teste' if input_fn is not None else 'entrada_terminal'
+                investigation_id=None, run_id=None, max_actions=None, action_guard=None, reviewer=None, result_guard=None):
+    """Fluxo supervisionado; reviewer opcional registra decisões delegadas separadamente."""
+    input_source = 'codex_delegado' if reviewer else ('entrada_injetada_teste' if input_fn is not None else 'entrada_terminal')
     input_fn = input_fn or input
     if host != '127.0.0.1':
         raise ValueError('o laboratório atual permite somente 127.0.0.1:3000')
@@ -308,6 +308,8 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
         raise ValueError('limite de propostas inválido')
     common = {'run_id': run_id or uuid.uuid4().hex,
               'tipo_execucao': 'engenharia_interativa' if engineering else 'academica'}
+    if reviewer:
+        common.update(responsavel_academico='Nicholas', operador='Codex', modo='delegado')
     if investigation_id is not None:
         if investigation_id not in ('INV-01', 'INV-02', 'INV-03'):
             raise ValueError('investigação inválida')
@@ -330,9 +332,28 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                 break
             print(json.dumps(proposal, ensure_ascii=True, indent=2))
             emit('proposta', **refs, proposta=proposal)
-            decision, action = review(proposal, input_fn, lambda kind, **fields: emit(kind, **refs, **fields))
-            reason = human_text('Justificativa da decisão: ', input_fn)
-            emit('decisao_humana', **refs, decisao=decision, justificativa=reason, acao_final=action,
+            if reviewer:
+                reviewed = reviewer('proposta', {**refs, 'proposta': proposal, 'historico': history})
+                decision, action, reason = reviewed['decisao'], reviewed.get('acao_final'), reviewed['justificativa']
+                if decision not in ('aprovada', 'modificada_aprovada', 'rejeitada', 'encerrada'):
+                    raise ValueError('decisão delegada inválida')
+                if not isinstance(reason, str) or not reason.strip() or len(reason) > 2000:
+                    raise ValueError('justificativa delegada inválida')
+                if decision == 'aprovada' and action != proposal:
+                    raise ValueError('aprovação deve corresponder à proposta')
+                if decision == 'modificada_aprovada':
+                    validate_proposal(action)
+                    emit('modificacao_validada', **refs, acao_modificada=action, origem=input_source)
+                    second = reviewer('confirmar_modificacao', {**refs, 'acao_final': action})
+                    if second.get('decisao') != 'aprovada' or second.get('acao_final') != action:
+                        raise ValueError('modificação exige segunda aprovação correspondente')
+                    emit('confirmacao_modificacao_delegada', **refs, decisao=second['decisao'],
+                         acao_final=second['acao_final'], justificativa=second.get('justificativa'),
+                         request_id=second.get('request_id'), origem=input_source)
+            else:
+                decision, action = review(proposal, input_fn, lambda kind, **fields: emit(kind, **refs, **fields))
+                reason = human_text('Justificativa da decisão: ', input_fn)
+            emit('decisao_delegada' if reviewer else 'decisao_humana', **refs, decisao=decision, justificativa=reason, acao_final=action,
                  origem=input_source)
             if decision == 'encerrada':
                 break
@@ -354,6 +375,12 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
             result = execute(action, host)
             emit('resultado', **refs, acao=action, resultado=result, duracao_s=round(time.monotonic() - started, 6))
             print(json.dumps(redact(result), ensure_ascii=True, indent=2))
+            if result_guard is not None:
+                try:
+                    result_guard(result)
+                except ValueError as exc:
+                    emit('parada_seguranca', **refs, motivo=str(exc))
+                    break
             emit('solicitacao_modelo', **refs, fase='interpretacao')
             try:
                 interpretation = interpret_result(objective, action, result, refs['result_id'])
@@ -362,21 +389,34 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                 break
             emit('interpretacao', **refs, interpretacao=interpretation)
             print(json.dumps(redact(interpretation), ensure_ascii=True, indent=2))
-            while True:
-                after = input_fn('Após a interpretação: continuar [c], encerrar [e]: ').strip().lower()
-                if after in ('c', 'e'):
-                    break
-            after_reason = human_text('Justificativa após a interpretação: ', input_fn)
+            if reviewer:
+                evaluation = reviewer('interpretacao', {**refs, 'acao': action, 'resultado': result,
+                                                        'interpretacao': interpretation, 'historico': history})
+                after, after_reason = evaluation['decisao'], evaluation['justificativa']
+                if after not in ('c', 'e') or not isinstance(after_reason, str) or not after_reason.strip():
+                    raise ValueError('avaliação delegada inválida')
+            else:
+                while True:
+                    after = input_fn('Após a interpretação: continuar [c], encerrar [e]: ').strip().lower()
+                    if after in ('c', 'e'):
+                        break
+                after_reason = human_text('Justificativa após a interpretação: ', input_fn)
             emit('decisao_pos_interpretacao', **refs, decisao=after, justificativa=after_reason,
                  origem=input_source)
             history.append({**refs, 'proposta': proposal, 'decisao': decision, 'acao': action,
-                            'resultado': result, 'interpretacao_resultado': interpretation})
+                            'resultado': result, 'interpretacao_resultado': interpretation,
+                            'avaliacao_revisor': after_reason})
             if after == 'e' or result.get('status') == 429:
                 if result.get('status') == 429:
                     emit('parada_seguranca', **refs, motivo='HTTP 429; nenhuma nova ferramenta nesta sessão')
                 break
-        conclusion = human_text('Decisão final e conclusão humana (ou pendência): ', input_fn)
-        emit('conclusao_humana', conclusao=conclusion, origem=input_source)
+        if reviewer:
+            conclusion = reviewer('conclusao', {'historico': history}).get('conclusao')
+            if not isinstance(conclusion, str) or not conclusion.strip():
+                raise ValueError('conclusão delegada ausente')
+        else:
+            conclusion = human_text('Decisão final e conclusão humana (ou pendência): ', input_fn)
+        emit('conclusao_delegada' if reviewer else 'conclusao_humana', conclusao=conclusion, origem=input_source)
     except (EOFError, KeyboardInterrupt):
         emit('interrompida', **refs, motivo='entrada encerrada; sem decisão/conclusão humana presumida')
 

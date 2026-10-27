@@ -16,3 +16,9 @@ Registre aqui apenas decisões que alterem escopo, segurança, reprodutibilidade
 | ADR-010 | Restauração exige identidade e bindings conhecidos, reinspeção após confirmação e remoção por ID | implementada em 2026-10-27 | evita apagar container identificado apenas pelo nome; recusa imagem/configuração divergente, mounts ou troca de ID; o daemon deve ser Rootless local |
 
 Ao aceitar uma decisão, registrar data, evidência e responsável. Se o diagnóstico exigir mudança, adicionar ADR-006+ com alternativas avaliadas; não apagar histórico.
+
+## ADR-011 — operação delegada explícita no Bloco 03 (2026-10-27)
+
+Nicholas solicitou adaptação por dificuldade física no teclado e relatou autorização do professor. O Qwen permanece o único agente acadêmico que escolhe ferramentas/parâmetros. O Codex desenvolvedor revisa propostas por um canal de arquivos privados; não foi criado segundo agente no programa nem framework de multiagentes. Revisor delegado e autorização humana são eventos distintos; decisões automáticas não serão atribuídas ao grupo. O modo terminal original permanece disponível.
+
+Critérios e exceção de operação em `docs/OPERACAO_DELEGADA_BLOCO03.md`. Alterações pequenas no ciclo permitem callbacks de revisão e guarda de resultados. Runner independente reaproveita validação/restauração Rootless e aprovação real anterior por hash. Mantém limite de seis propostas, sem sequência fixa; ações modificadas requerem revalidação e segunda decisão delegada. Bloqueios de escopo e erro de identidade interrompem o fluxo. Os resultados técnicos podem ser analisados; aceite acadêmico da delegação e conclusão do grupo continuam pendentes. Não tratar autorização de acessibilidade como prova de decisão humana em cada ação.
