@@ -42,3 +42,16 @@ Para ensaio técnico interativo, use `python3 agent.py --engenharia --ip 127.0.0
 ## Testes
 
 `python3 -m unittest discover -s tests -v` executa os testes locais com fixtures e mocks explicitamente identificados; as integrações reais são ignoradas por padrão. Com serviços ativos e autorização para as leituras técnicas, `KIT11_REAL_TESTS=1 python3 -m unittest discover -s tests -p test_engineering_real.py -v` consulta Ollama/Qwen, HTTP público local e Nmap reais. O gate automatizado desses testes não é decisão humana e não executa propostas condicionais A/B. Resultados e limitações observados estão em `docs/ENGENHARIA_BLOCO02.md`.
+
+## Bloco 03 — execução supervisionada
+
+A preparação e seus portões estão documentados em [docs/OPERACAO_BLOCO03.md](docs/OPERACAO_BLOCO03.md). Em terminal interativo no Ubuntu KIT11, execute **uma investigação por vez**, após deliberação real do grupo:
+
+```sh
+cd /home/kit11/Kit11-AF
+./scripts/af_run.sh INV-01
+./scripts/af_run.sh INV-02
+./scripts/af_run.sh INV-03
+```
+
+Cada comando é independente: não executar a lista como lote. O script interrompe sem aprovação explícita do plano, evidências atuais Kali/WAN, restauração confirmada e preflight válido. O isolamento WAN permanece PENDENTE até comprovação pelo grupo. Nenhuma investigação acadêmica foi realizada na preparação destes scripts.

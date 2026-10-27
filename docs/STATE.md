@@ -1,6 +1,6 @@
 # Estado atual e handoff
 
-Atualizado em 2026-10-27 após manutenção dos scripts para os dois endpoints autorizados; registros anteriores são históricos.
+Atualizado em 2026-10-27 após preparação automatizada do bloco 03, testada com fixtures; registros anteriores são históricos.
 
 ## Código local — atualizado no bloco 02
 - `agent.py`: Python sem dependências externas, API Ollama em loopback, ferramentas `nmap`, `http_get` e `http_post`, confirmação humana, execução restrita ao IP local parametrizado e logs JSONL.
@@ -27,11 +27,11 @@ Atualizado em 2026-10-27 após manutenção dos scripts para os dois endpoints a
 | 00 — Auditoria/sincronização | CONCLUÍDO | auditoria local e comparação com origin registradas abaixo; laboratório real permanece pendente |
 | 01 — Laboratório | PARCIAL | dois endpoints verificados no Ubuntu; Kali/VPN confirmado pelo usuário com HTTP 200; isolamento WAN e retomada após logout/reinicialização pendentes |
 | 02 — Agente | CONCLUÍDO | implementação e ensaios de engenharia verificados; limitações do LLM registradas; exceção de dependência ADR-007 |
-| 03 — Investigações | PENDENTE | plano humano e três execuções reais com supervisão |
+| 03 — Investigações | PREPARAÇÃO CONCLUÍDA / EXECUÇÃO PENDENTE | scripts e síntese testados com fixtures; aprovação do grupo, comprovação WAN e três execuções reais pendentes |
 | 04 — Entrega | PENDENTE | relatório/roteiro existentes são templates; consolidar evidências reais |
 
 ## Próxima sessão
-Aguardar autorização para o bloco 03 e planejamento acadêmico preenchido/aprovado pelo grupo. A exceção ADR-007 não conclui as pendências do bloco 01 nem autoriza investigações. **Não executar investigação definitiva antes de `plano_humano.md` aprovado.**
+A preparação do bloco 03 está autorizada e implementada. Próximo passo é participação do grupo nos portões de `scripts/af_run.sh INV-01`, conforme `docs/OPERACAO_BLOCO03.md`; não iniciar cenários em lote. A exceção ADR-007 não conclui as pendências do bloco 01. **Não consultar o Qwen para investigação definitiva antes de aprovação real do plano e comprovação dos portões de rede.** Bloco 04 não iniciado.
 
 ## Registro de sessão — 2026-10-27 12:25 -03
 
@@ -90,3 +90,14 @@ Aguardar autorização para o bloco 03 e planejamento acadêmico preenchido/apro
 - **Testes:** `python3 -m unittest discover -s tests -v`: 40 descobertos, 37 passaram e três integrações Ollama opt-in ignoradas; oito testes novos usam fixtures explícitas para Docker/endereço e cobrem bindings, socket Rootless, recusa de imagem/configuração erradas, cancelamento, troca de ID e remoção somente por ID validado. `sh -n` nos quatro scripts shell e `git diff --check` passaram.
 - **Serviços e rede preservados:** Apache/mysql/openvpn continuaram ativos; HTTP existente 80=200 e 8000=302 antes/depois; `ip_forward=0` e rota via `10.0.80.1` observados. Nenhuma alteração de firewall, NAT, pfSense, OpenVPN ou daemon/configuração Rootless; nenhum container real removido/recriado nesta manutenção.
 - **PENDENTE:** verificação suficiente do isolamento WAN; HTTP pela VPN e bind em IP privado não a comprovam. Retomada após logout/reinicialização continua não verificada. Sem investigações definitivas ou avanço de bloco.
+
+## Registro de sessão — 2026-10-27 — preparação do bloco 03
+
+- **Autorização e estado real:** usuário autorizou preparar automação, testar com fixtures e fazer commit/push; reservou aprovações acadêmicas para participação humana. `git status` inicialmente limpo; `git fetch origin` e comparação HEAD/origin retornaram `0 0`. Código Ubuntu preservado. Não houve nova verificação dos serviços reais, acesso ao Kali ou inspeção WAN nesta preparação; registros anteriores não são promovidos a evidência atual.
+- **CONCLUÍDO — preparação:** `scripts/af_run.sh` chama `af_session.py`, reutilizando `agent.run_session`, `lab_common.sh` e `restore.sh`. Exige terminal, pessoas/data/justificativa/aprovação explícita com hash/snapshot do plano, referências atuais Kali/WAN, identidade/imagem/digest/bindings Rootless, Nmap/modelo local, restauração confirmada e readiness. Sem confirmação, encerra; não há aceite silencioso. Cada investigação tem pasta privada e run_id/investigation_id comum à preparação e ao agente. O modelo recebe objetivo, sem sequência fixa de ferramentas.
+- **Mudanças mínimas no agente:** parâmetros opcionais de identificação/limite e guarda de ação, preservando CLI/testes anteriores e revisão humana. Runner limita a seis propostas; INV-02 restringe POST aos controles A/B/C do plano, sem repetição de variante na sessão; 429 impede novas ferramentas. Não introduz dependências, framework ou multiagentes.
+- **CONCLUÍDO — processamento:** `af_summarize.py` produz resumo privado determinístico com comparação de candidatos planejados × propostas reais, decisões/justificativas, resultados resumidos, interpretações atribuídas, erros registrados e matriz linha/event_id/proposal_id/execution_id/result_id. Verifica vínculos; não julga correção de inferências nem decide hipótese. Atualização automática de checklist/estado registra contagens e PENDENTE de revisão, sem promover conclusão. Fixtures/engenharia não podem atualizar estado acadêmico.
+- **Documentação:** comandos e procedimento em `docs/OPERACAO_BLOCO03.md`, README e índice; checklist atualizado. `plano_humano.md` teve somente a descrição desatualizada dos endpoints/Kali corrigida para refletir o registro anterior; hipóteses e campos de aprovação permanecem intactos e pendentes. Material de apoio para relatório de 4–6 páginas e vídeo até 10 minutos preparado, sem preencher resultados nos templates nem iniciar o bloco 04.
+- **Evidência de testes:** `python3 -m unittest discover -s tests -v`: 53 descobertos, 50 passaram e três integrações reais opt-in ignoradas. Treze novos testes usam fixtures/mocks explícitos, incluindo preparação dos três cenários, cancelamento/plano recusado, WAN pendente, espera/timeout, ausência do modelo, limite de variantes, bloqueio antes da execução, HTTP 429, matriz/IDs, lacunas de autorização/interpretação, recusa de symlink e contagens apenas em árvore temporária. Uma regressão inicial no teste existente de limite de propostas revelou captura do valor padrão na definição da função; corrigido para resolver MAX_ACTIONS na chamada, e a suíte completa passou. Essa falha de desenvolvimento não é uma limitação acadêmica do Qwen.
+- **Verificações estáticas:** `sh -n` nos scripts de execução/laboratório, `python3 -m py_compile agent.py scripts/af_session.py scripts/af_summarize.py` e `git diff --check` passaram. Nenhuma consulta real ao Qwen, ferramenta ofensiva, restauração real, instalação, sudo ou alteração de rede/serviços/bindings foi executada. Fixtures não são evidência de laboratório real nem decisões humanas.
+- **PENDENTE:** aprovação/deliberação do grupo com cronologia/autoria verdadeira e discussão formal com professor quando aplicável; evidência atual Kali; comprovação WAN (continua PENDENTE); três sessões reais com decisões e conclusões; análise crítica sustentada; capturas revisadas; relatório e vídeo finais. Continuidade após logout/reinicialização segue NÃO VERIFICADA. Próximo passo dentro do mesmo bloco: `./scripts/af_run.sh INV-01`, somente com participação humana nos portões; não avançar automaticamente ao bloco 04.

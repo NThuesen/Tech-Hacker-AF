@@ -18,10 +18,10 @@
 | Modelo | Ollama **qwen3:4b-instruct**, API **127.0.0.1:11434** | Resposta real e integração registradas nos blocos 01–02 |
 | Ferramentas integradas | **nmap** (somente TCP/3000), **http_get** e **http_post** (caminhos relativos ao Juice Shop) | Implementadas em agent.py; validar novamente antes da AF |
 | Supervisão | Aprovar, modificar com segunda aprovação, rejeitar ou encerrar; decisão posterior à interpretação | Implementada; decisões do ensaio de engenharia já registradas |
-| Estação cliente | Kali VM do notebook, por OpenVPN do Roteiro 1, alcançando a rede LAN | Conectividade histórica documentada; **acesso atual ao Juice Shop pelo Kali ainda PENDENTE** |
+| Estação cliente | Kali VM do notebook, por OpenVPN do Roteiro 1, alcançando a rede LAN | Usuário confirmou HTTP 200 pela VPN em 10.0.80.3:3001 na sessão anterior; registrar nova evidência antes de cada investigação |
 | Outros serviços | WordPress :80, Nextcloud :8000, pfSense, OpenVPN | Fora do escopo; não modificar ou testar ofensivamente |
 
-**Portão de execução acadêmica:** antes das investigações, comprovar novamente acesso do Kali ao Juice Shop e isolamento da WAN. O uso de OpenVPN existente é preferível a implantar SSH. Hoje a instância atende somente em loopback: isso **não** prova acesso do Kali. Qualquer publicação adicional precisa de verificação de NAT/firewall e aprovação específica; não habilitar porta 3000 na WAN. O diagnóstico, o reconhecimento histórico do Roteiro 1 e os ensaios do bloco 02 **não substituem** esse teste de conectividade atual.
+**Portão de execução acadêmica:** antes das investigações, comprovar novamente acesso do Kali ao Juice Shop e isolamento da WAN. O uso de OpenVPN existente é preferível a implantar SSH. A instância tem os bindings fixos 127.0.0.1:3000 e 10.0.80.3:3001; o agente usa exclusivamente o primeiro. O acesso Kali foi confirmado pelo usuário na sessão anterior, mas não comprova isolamento WAN, que continua PENDENTE. Não alterar esses bindings nem habilitar portas na WAN. O diagnóstico, o reconhecimento histórico do Roteiro 1 e os ensaios do bloco 02 **não substituem** esse teste de conectividade atual.
 
 ### 1.2 Escopo autorizado e regras de segurança
 

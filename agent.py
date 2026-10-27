@@ -293,7 +293,8 @@ def human_text(prompt, input_fn):
         print('Informe de 1 a 2000 caracteres.')
 
 
-def run_session(objective, host, path, input_fn=None, engineering=False, plan_confirmed=False):
+def run_session(objective, host, path, input_fn=None, engineering=False, plan_confirmed=False,
+                investigation_id=None, run_id=None, max_actions=None, action_guard=None):
     """Fluxo interativo: não há aprovação automática, inclusive em engenharia."""
     input_source = 'entrada_injetada_teste' if input_fn is not None else 'entrada_terminal'
     input_fn = input_fn or input
@@ -302,17 +303,24 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
     if not engineering and not plan_confirmed:
         raise ValueError('sessão acadêmica exige confirmação prévia do plano humano')
     recent_history(objective, [])
-    common = {'run_id': uuid.uuid4().hex,
+    max_actions = MAX_ACTIONS if max_actions is None else max_actions
+    if type(max_actions) is not int or not 1 <= max_actions <= MAX_ACTIONS:
+        raise ValueError('limite de propostas inválido')
+    common = {'run_id': run_id or uuid.uuid4().hex,
               'tipo_execucao': 'engenharia_interativa' if engineering else 'academica'}
+    if investigation_id is not None:
+        if investigation_id not in ('INV-01', 'INV-02', 'INV-03'):
+            raise ValueError('investigação inválida')
+        common['investigation_id'] = investigation_id
     def emit(kind, **fields):
         log(path, kind, **common, **fields)
     emit('inicio', objetivo=objective, alvo=host, porta=3000, modelo=MODEL,
-         plano_humano_confirmado=plan_confirmed, limite_propostas=MAX_ACTIONS,
-         limite_chamadas_modelo=MAX_ACTIONS * 2)
+         plano_humano_confirmado=plan_confirmed, limite_propostas=max_actions,
+         limite_chamadas_modelo=max_actions * 2)
     history = []
     refs = {}
     try:
-        for step in range(1, MAX_ACTIONS + 1):
+        for step in range(1, max_actions + 1):
             refs = {'step_id': step, 'proposal_id': uuid.uuid4().hex}
             emit('solicitacao_modelo', **refs, fase='proposta')
             try:
@@ -333,6 +341,13 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                 continue
             # Registro durável da autorização precede qualquer execução; falha no log aborta.
             validate_proposal(action)
+            if action_guard is not None:
+                try:
+                    action_guard(action)
+                except ValueError as exc:
+                    emit('acao_bloqueada', **refs, motivo=str(exc))
+                    print('Ação bloqueada:', json.dumps(str(exc), ensure_ascii=True))
+                    break
             refs.update(execution_id=uuid.uuid4().hex, result_id=uuid.uuid4().hex)
             emit('execucao', **refs, acao=action)
             started = time.monotonic()
@@ -356,7 +371,9 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                  origem=input_source)
             history.append({**refs, 'proposta': proposal, 'decisao': decision, 'acao': action,
                             'resultado': result, 'interpretacao_resultado': interpretation})
-            if after == 'e':
+            if after == 'e' or result.get('status') == 429:
+                if result.get('status') == 429:
+                    emit('parada_seguranca', **refs, motivo='HTTP 429; nenhuma nova ferramenta nesta sessão')
                 break
         conclusion = human_text('Decisão final e conclusão humana (ou pendência): ', input_fn)
         emit('conclusao_humana', conclusao=conclusion, origem=input_source)

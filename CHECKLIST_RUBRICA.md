@@ -11,7 +11,8 @@
 | Plano humano anterior ao LLM | PENDENTE | plano_humano.md; exige grupo |
 | Três investigações e evidências reais | PENDENTE | plano_humano.md, relatorio_template.md; grupo deve executar |
 | Comparação e limitação observada | PARCIAL | limitações técnicas reais em docs/ENGENHARIA_BLOCO02.md; comparação com plano humano acadêmico ainda pendente |
-| Código, instruções e testes | CONCLUÍDO | README.md, agent.py, tests/test_agent.py |
+| Código, instruções e testes | CONCLUÍDO NA PREPARAÇÃO | README.md, agent.py, scripts/af_run.sh, scripts/af_summarize.py, docs/OPERACAO_BLOCO03.md; 53 testes descobertos, 50 passaram, 3 integrações reais ignoradas |
+| Preparação e síntese automatizadas do bloco 03 | CONCLUÍDO COM FIXTURES | tests/test_af_automation.py; aprovação real, restauração real e investigações não executadas nesta preparação |
 | Relatório 4–6 páginas e vídeo até 10 min | PENDENTE | relatorio_template.md, roteiro_video.md; templates apenas |
 
 O usuário autorizou a exceção ADR-007 para iniciar o bloco 02 com o bloco 01 parcial. Ensaios de engenharia não substituem as investigações, o planejamento humano nem os entregáveis acadêmicos; não representam garantia de nota.

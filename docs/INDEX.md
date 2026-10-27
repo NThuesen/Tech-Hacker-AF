@@ -10,6 +10,7 @@
 | `PROMPTS.md` | iniciar uma sessão curta sem repetir um mega-prompt |
 | `docs/STATE.md` | primeira leitura de cada sessão; estado real vs. pendente |
 | `docs/ENGENHARIA_BLOCO02.md` | comandos, IDs e limitações dos ensaios técnicos do agente |
+| `docs/OPERACAO_BLOCO03.md` | comandos INV-01/02/03, portões humanos, síntese privada e rastreabilidade |
 | `docs/CONTEXT.md` | consulta de infraestrutura histórica |
 | `docs/ARCHITECTURE.md` | mudança de código/topologia |
 | `docs/RUBRIC.md` | validação de critérios da AF |
