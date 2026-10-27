@@ -1,26 +1,29 @@
-# Índice da documentação
+# Índice da documentação e infraestrutura Codex
 
-A documentação é dividida para economizar contexto. **Codex lê automaticamente `AGENTS.md` na raiz.** Os demais arquivos devem ser abertos conforme o bloco em execução.
+**Separação:** `AGENTS.md` na raiz = instruções automáticas do **Codex desenvolvedor**. `docs/` = conhecimento e evidência. `tasks/` = blocos de execução. `agents/` = perspectivas opcionais de revisão, **não** subagentes executando automaticamente. `agent.py` = agente acadêmico local integrado ao Ollama.
 
-| Arquivo | Responsabilidade |
+## Navegação mínima
+| Documento | Ler quando |
 |---|---|
-| `AGENTS.md` | regras permanentes e limites de segurança |
-| `PLANS.md` | ordem dos blocos e critérios de avanço |
-| `PROMPTS.md` | comandos curtos para iniciar/continuar o Codex |
-| `docs/CONTEXT.md` | fatos confirmados e contexto histórico |
-| `docs/ARCHITECTURE.md` | arquitetura-alvo e fronteiras |
-| `docs/RUBRIC.md` | matriz de rastreabilidade à AF |
-| `docs/DECISIONS.md` | escolhas arquiteturais e suas razões |
-| `docs/STATE.md` | realizado vs. pendente com evidência |
-| `tasks/00-auditoria.md` | inventário + integração do código existente |
-| `tasks/01-laboratorio.md` | componentes reais e rede |
-| `tasks/02-agente.md` | ciclo de decisão supervisionado |
-| `tasks/03-investigacoes.md` | protocolo das três investigações |
-| `tasks/04-entrega.md` | relatório, apresentação e reprodução |
-| `agents/` | papéis de revisão técnica opcionais (não runtime) |
+| `AGENTS.md` | sempre (regras de projeto para Codex) |
+| `PLANS.md` | escolher próximo bloco e portões de aceite |
+| `PROMPTS.md` | iniciar uma sessão curta sem repetir um mega-prompt |
+| `docs/STATE.md` | primeira leitura de cada sessão; estado real vs. pendente |
+| `docs/CONTEXT.md` | consulta de infraestrutura histórica |
+| `docs/ARCHITECTURE.md` | mudança de código/topologia |
+| `docs/RUBRIC.md` | validação de critérios da AF |
+| `docs/DECISIONS.md` | mudanças arquiteturais |
+| `docs/requisitos.md` | resumo extraído pelo Codex dos PDFs |
+| `tasks/00-auditoria.md` | sincronização e diagnóstico |
+| `tasks/01-laboratorio.md` | Docker/Juice Shop/Ollama/Nmap |
+| `tasks/02-agente.md` | implementação/validação do agente Python |
+| `tasks/03-investigacoes.md` | ensaios reais e decisões humanas |
+| `tasks/04-entrega.md` | relatório/vídeo/checklist |
+| `agents/code-reviewer.md` | auditoria opcional do código |
+| `agents/evidence-auditor.md` | auditoria opcional de rastreabilidade |
 
-**Duas IAs distintas:** Codex é o **assistente de desenvolvimento**; Qwen/Ollama é o **agente acadêmico local**, cujo comportamento e supervisão serão avaliados.
+## Fontes originais
+- `docs/AF - Tecnologias Hackers 26-2.pdf` (avaliação final; fonte normativa).
+- `docs/Relatorio_Final_Roteiro1_Firewall_KIT11.pdf` (histórico do kit).
 
-**Fontes originais no repositório:** `docs/AF - Tecnologias Hackers 26-2.pdf` e `docs/Relatorio_Final_Roteiro1_Firewall_KIT11.pdf`.
-
-**Regra de manutenção:** uma informação pertence a um único arquivo-fonte; outros documentos devem linká-lo, não copiá-lo.
+Não duplicar integralmente PDFs no prompt nem transformar resultados simulados em evidências reais.
