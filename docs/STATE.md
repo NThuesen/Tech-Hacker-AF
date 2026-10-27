@@ -1,13 +1,13 @@
 # Estado atual e handoff
 
-Atualizado em 2026-10-27 após auditoria no Ubuntu do KIT11; o registro de sessão abaixo distingue as evidências atuais do histórico documental.
+Atualizado em 2026-10-27 após os ensaios técnicos do bloco 02 no Ubuntu do KIT11; registros anteriores são históricos.
 
-## Código presente em main, verificado no GitHub
+## Código local — atualizado no bloco 02
 - `agent.py`: Python sem dependências externas, API Ollama em loopback, ferramentas `nmap`, `http_get` e `http_post`, confirmação humana, execução restrita ao IP local parametrizado e logs JSONL.
-- `tests/test_agent.py`: **10** testes unitários definidos para validação/rejeição, modificação, Nmap delimitado, servidor HTTP simulado, modelo simulado, logs e erros.
+- `tests/test_agent.py` e `tests/test_agent_safety.py`: 29 testes locais com fixtures/mocks identificados. `tests/test_engineering_real.py`: três integrações reais opt-in, registradas separadamente.
 - `scripts/start.sh` / `scripts/restore.sh`: Juice Shop `bkimminich/juice-shop:v17.3.0` no IP privado informado, restauração por remoção/criação de container.
 - `README.md`, `diagnostico.md`, `PENDENCIAS.md`, `CHECKLIST_RUBRICA.md`, `docs/requisitos.md`, `plano_humano.md`, `relatorio_template.md`, `roteiro_video.md`.
-- A auditoria atual executou os testes locais; instalações e integrações reais continuam pendentes.
+- Docker Rootless, Nmap, Ollama/Qwen e HTTP local foram verificados; os registros dos blocos 01 e 02 distinguem resultados reais e simulações.
 
 ## Diagnóstico anterior (registrado pelo Codex em diagnostico.md)
 - Ubuntu 24.04.1, Intel i5-14500T, 15 GiB RAM (~11 GiB disponível à época), ~39 GiB livres em /; interface `10.0.80.3/24`.
@@ -15,23 +15,23 @@ Atualizado em 2026-10-27 após auditoria no Ubuntu do KIT11; o registro de sess�
 - Docker, Nmap e Ollama **não instalados quando o diagnóstico foi escrito**. Pode ter mudado: revalidar com comandos reais antes de afirmar bloqueio.
 - Acesso pelo Kali e ausência de publicação WAN ainda não foram confirmados na evidência examinada.
 
-## Lacunas observadas no código (a investigar no bloco 02)
-1. `interpretacao` é produzida na **proposta anterior** à execução; não há evento explícito de interpretação do resultado recém-obtido quando o fluxo acaba. Verificar/implementar evidência vinculada a cada resultado.
-2. O histórico é enviado ao LLM, mas os testes simulados verificam principalmente a presença do histórico no prompt; **não comprovam** que o modelo real modifica a decisão frente a evidências diferentes.
-3. O POST atual usa corpo JSON e cabeçalho fixo; checar se cobre a investigação de autenticação escolhida sem expandir excessivamente permissões.
-4. O estado de restauração, acesso Kali, isolamento da publicação e operação real da API Ollama permanecem por validar.
+## Lacunas e limites após o bloco 02
+1. Interpretação explícita de cada resultado implementada, com IDs e decisão posterior. Uma falha de interpretação gera pendência e encerra o ciclo; não há recuperação automática.
+2. Adaptação condicional observada com Qwen real após delimitar o objetivo técnico; a tentativa inicial com objetivo genérico produziu ações idênticas. O modelo ainda pode generalizar indevidamente ou interpretar mal respostas.
+3. POST mantém corpo JSON validado e sem cabeçalhos/cookies arbitrários. Teste de autenticação real e adequação à investigação escolhida dependem do plano acadêmico do grupo.
+4. Restauração e Ollama locais foram verificados; acesso Kali, isolamento WAN e continuidade após logout/reinicialização continuam pendentes do bloco 01. Log privado não substitui revisão antes de compartilhar.
 
 ## Estado dos blocos
 | Bloco | Status | Próxima evidência requerida |
 |---|---|---|
 | 00 — Auditoria/sincronização | CONCLUÍDO | auditoria local e comparação com origin registradas abaixo; laboratório real permanece pendente |
 | 01 — Laboratório | PARCIAL | laboratório local validado; acesso Kali por conexão já autorizada e isolamento WAN permanecem pendentes |
-| 02 — Agente | PARCIAL | código existe; integração real, interpretação pós-resultado e decisões condicionais pendentes |
+| 02 — Agente | CONCLUÍDO | implementação e ensaios de engenharia verificados; limitações do LLM registradas; exceção de dependência ADR-007 |
 | 03 — Investigações | PENDENTE | plano humano e três execuções reais com supervisão |
 | 04 — Entrega | PENDENTE | relatório/roteiro existentes são templates; consolidar evidências reais |
 
 ## Próxima sessão
-Bloco 01 autorizado com Docker Rootless e bind em loopback; consultar o registro mais recente para as evidências e pendências. **Não executar investigação definitiva antes de `plano_humano.md` aprovado.**
+Aguardar autorização para o bloco 03 e planejamento acadêmico preenchido/aprovado pelo grupo. A exceção ADR-007 não conclui as pendências do bloco 01 nem autoriza investigações. **Não executar investigação definitiva antes de `plano_humano.md` aprovado.**
 
 ## Registro de sessão — 2026-10-27 12:25 -03
 
@@ -67,3 +67,14 @@ Bloco 01 autorizado com Docker Rootless e bind em loopback; consultar o registro
 - **Kali PENDENTE:** `systemctl is-active ssh sshd` retornou inativo e `ss` não mostrou TCP/22 no KIT11. Um túnel `ssh -L 127.0.0.1:3000:127.0.0.1:3000` pelo cliente Kali seria possível somente por uma conexão SSH ao host previamente autorizada, disponível e com encaminhamento permitido; nenhuma foi identificada ou configurada, e Kali não foi testado. Loopback do KIT11 não é diretamente acessível pelo Kali.
 - **Testes automatizados:** `python3 -m unittest discover -s tests -v`: 10 passaram novamente após instalações; os testes de HTTP/modelo/Nmap usam simulações, distintas das verificações reais acima. Às 12:41 -03, HTTP 80=200, 8000=302 e 3000=200; Apache/mysql/openvpn e serviços de usuário Docker/Ollama ativos; daemon e socket Docker de sistema inativos, 32 GiB livres em `/`. Nenhuma investigação definitiva ou ação do agente acadêmico foi executada.
 - **Pendências:** testar o acesso Kali por conexão SSH já autorizada, se existir, e confirmar isolamento WAN; bloco 01 permanece PARCIAL pelos critérios de acesso externo. Os serviços de usuário estão habilitados, mas `Linger=no`; o container foi criado com `--restart no` e não há garantia de retomada após logout ou reinicialização. Não iniciar bloco 02 sem autorização.
+
+## Registro de sessão — 2026-10-27 — bloco 02
+
+- **Escopo e dependência:** usuário autorizou exclusivamente o bloco 02 e uma exceção controlada ao bloco 01 parcial (ADR-007). Árvore inicialmente limpa em `020deb4`, igual a `origin/main` após fetch. Nenhuma mudança de rede, Docker, SSH ou serviços; Juice Shop e Ollama mantidos em loopback. Código existente e testes preservados e ampliados.
+- **Implementação:** contrato de proposta mantido; interpretação pós-resultado independente, IDs correlacionados, justificativas e decisão após interpretação, JSON/schema estritos, confirmação de geração concluída, limites de contexto/corpo/chamadas, POST UTF-8 validado, alvo fixo e ausência de shell livre. Logs com append/fsync, arquivos 0600 em diretório 0700, recusa de links/permissões compartilhadas e redação de campos sensíveis. O diretório local `logs/` foi restringido de 0775 para 0700; JSONL fora do Git. `--engenharia` identifica ensaios e não declara plano humano aprovado; o modo acadêmico mantém o portão de confirmação.
+- **Testes reais:** `KIT11_REAL_TESTS=1 python3 -m unittest discover -s tests -p test_engineering_real.py -v`: após ajuste, os dois testes então existentes passaram em 101,552 s, `run_id=1779e55fd5ec4ddcb037542bad92d041`. HTTP 200 do produto levou o Qwen a propor GET da versão; HTTP 404 levou a GET de produto válido. Propostas A/B não executadas. Integração simples executou GET da versão escolhido pelo modelo e Nmap como fixture técnica automatizada, ambos com interpretação real. A regressão adicional de HTML extenso passou isoladamente em 22,839 s, `run_id=e9d9c24ba7bb46aca9e6fa3d5ca8dc59`.
+- **Falhas observadas:** primeira tentativa `c44eb79d07ff4bd981079a2cb5aa3432` teve uma falha (propostas iguais sob objetivo genérico) e um erro (timeout de 180 s na interpretação de HTML). Preservados os logs. Delimitado o objetivo de engenharia sem codificar seleção por evidência; corpo enviado ao modelo limitado a prefixo de 2048 bytes com tamanho/hash. Interpretações ainda mostraram excesso de confiança e inferências não sustentadas: schema correto não garante conclusão correta.
+- **Supervisão humana real:** o usuário modificou GET `/api/Products` para GET `/rest/admin/application-version`, com justificativa de limitar à versão, e confirmou a ação final após revalidação. HTTP real retornou 200 e versão 17.3.0. O Qwen também inferiu catálogo indevidamente; o usuário decidiu encerrar, validar somente a versão e rejeitar essas inferências. Eventos em `logs/engenharia-humana-bloco02.jsonl`, `run_id=0a55a4672c3c40f0b4cb31a36edccae5`, resultado `733b497e7a4d4774888564db2b64a04b`. Entradas vieram da conversa, não foram simuladas no terminal; gates automatizados e entradas unitárias são identificados separadamente.
+- **Rastreabilidade:** comandos, resultados, IDs, limites e distinção entre engenharia e avaliação em `docs/ENGENHARIA_BLOCO02.md`. Alterados `agent.py`, `.gitignore`, testes e documentação de estado/arquitetura/rubrica/operação. Nenhum plano acadêmico produzido ou aprovado pelo Codex; nenhuma investigação definitiva executada.
+- **Verificação final às 13:08 -03:** `python3 -m unittest discover -s tests -v` descobriu 32 testes: 29 passaram e três integrações reais foram ignoradas por padrão (executadas separadamente acima); `git diff --check` passou. IP/rota e `ip_forward=0` preservados nas leituras atuais; portas 3000/11434 apenas em loopback, sem TCP/22. Apache/mysql/openvpn ativos, Docker de sistema inativo; HTTP 80=200, 8000=302, 3000=200. Logs locais 0700/0600 confirmados e ignorados pelo Git.
+- **Pendências:** resolver conectividade Kali e demais pendências do bloco 01 quando autorizado; grupo elaborar/aprovar o plano e autorizar bloco 03 antes de ensaios acadêmicos. Autenticação real via POST não foi exercitada; cabeçalhos/cookies não foram ampliados sem necessidade demonstrada.

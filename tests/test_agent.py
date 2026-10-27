@@ -42,6 +42,9 @@ class Tests(unittest.TestCase):
     def test_post(self):
         r = agent.execute(action('http_post', {'path': '/', 'body': '{"x":1}'}), '127.0.0.1', self.server.server_port)
         self.assertEqual((r['status'], r['body']), (201, '{"x":1}'))
+        r = agent.execute(action('http_post', {'path': '/', 'body': '{"texto":"ação","password":"sentinela"}'}), '127.0.0.1', self.server.server_port)
+        self.assertEqual(json.loads(r['body'])['texto'], 'ação')
+        self.assertNotIn('sentinela', r['body'])
     def test_validation(self):
         for a in [action(params={'path': '//example.com'}), action(params={'path': '/\r\nX: y'}), action('http_post', {'path': '/', 'body': 'x'*4097}), action('shell', {}), {}]:
             with self.assertRaises(ValueError): agent.validate_proposal(a)
@@ -69,7 +72,7 @@ class Tests(unittest.TestCase):
         class Response:
             def __enter__(self): return self
             def __exit__(self, *args): pass
-            def read(self, n): return json.dumps({'response': json.dumps(action())}).encode()
+            def read(self, n): return json.dumps({'response': json.dumps(action()), 'done': True}).encode()
         with patch('agent.urllib.request.build_opener') as opener:
             opener.return_value.open.return_value = Response()
             agent.model_call('objetivo', [{'resultado': 'evidencia anterior'}])
@@ -86,8 +89,8 @@ class Tests(unittest.TestCase):
             with open(path) as f: rows = [json.loads(line) for line in f]
             self.assertEqual([r['evento'] for r in rows], ['proposta', 'fim']); self.assertIn('timestamp', rows[0])
     def test_main_rejection_never_executes(self):
-        answers = iter(['s', 'objetivo', 'r', 'e', 'conclusao'])
-        with tempfile.TemporaryDirectory() as d, patch('sys.argv', ['agent.py', '--ip', '127.0.0.1', '--log', os.path.join(d, 'log')]), patch('builtins.input', side_effect=lambda _: next(answers)), patch('agent.model_call', return_value=action()), patch('agent.execute') as execute, contextlib.redirect_stdout(io.StringIO()):
+        answers = iter(['s', 'objetivo', 'r', 'recusado no teste unitário', 'e', 'encerrar o teste', 'conclusao'])
+        with tempfile.TemporaryDirectory() as d, patch('sys.argv', ['agent.py', '--ip', '127.0.0.1', '--log', os.path.join(d, 'log.jsonl')]), patch('builtins.input', side_effect=lambda _: next(answers)), patch('agent.model_call', return_value=action()), patch('agent.execute') as execute, contextlib.redirect_stdout(io.StringIO()):
             agent.main(); execute.assert_not_called()
 
 if __name__ == '__main__': unittest.main()

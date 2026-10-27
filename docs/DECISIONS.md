@@ -10,5 +10,7 @@ Registre aqui apenas decisões que alterem escopo, segurança, reprodutibilidade
 | ADR-004 | Fluxo em blocos e trilha de evidências JSONL | proposta | facilita auditoria, avanço incremental e controle de tokens |
 | ADR-005 | Não reimplementar código local que ainda não foi enviado ao GitHub | vigente para desenvolvimento | evita perda de trabalho/código duplicado |
 | ADR-006 | Docker Rootless e Juice Shop inicialmente em loopback; acesso Kali por SSH apenas se já autorizado | vigente em 2026-10-27 por instrução do usuário | preserva a rede do host; acesso remoto e isolamento da WAN continuam sujeitos a validação |
+| ADR-007 | Iniciar exclusivamente o bloco 02 apesar do bloco 01 parcial | exceção controlada autorizada pelo usuário em 2026-10-27 | laboratório local operacional; pendências Kali/WAN permanecem abertas; não autoriza bloco 03 ou mudança de rede |
+| ADR-008 | Manter contrato de proposta existente e acrescentar interpretação separada, IDs e logs privados | implementada no bloco 02, 2026-10-27 | cada resultado exige interpretação explícita; saída incorreta ou falha de log interrompe o fluxo; ensaios técnicos são identificados e não substituem o plano acadêmico |
 
 Ao aceitar uma decisão, registrar data, evidência e responsável. Se o diagnóstico exigir mudança, adicionar ADR-006+ com alternativas avaliadas; não apagar histórico.

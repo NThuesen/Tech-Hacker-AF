@@ -24,7 +24,13 @@ Se houver uma conexão SSH já autorizada até o KIT11 com encaminhamento permit
 
 ## Operação e limites
 
-Cada ciclo gera proposta JSON, mostra-a e solicita aprovação, modificação (seguida de nova aprovação), rejeição ou encerramento. Resultados e decisões anteriores são enviados ao LLM para a próxima escolha; não há roteiro fixo. Nmap usa conexão TCP em uma única porta, HTTP usa apenas caminhos relativos, sem proxies nem redirecionamentos; limite de 20 propostas, timeout 8 s por ferramenta, POST até 4 KiB e resposta até 16 KiB. Dados dos testes, inclusive corpos e cabeçalhos, são registrados: use apenas contas e dados de laboratório e proteja os arquivos de log. JSONL inclui horário UTC e conclusão humana. Limites não substituem supervisão, e o modelo pode interpretar incorretamente evidências.
+Cada ciclo gera uma proposta JSON e solicita aprovação, modificação (com segunda aprovação), rejeição ou encerramento, com justificativa. Após executar, o modelo interpreta explicitamente o resultado; o operador decide continuar ou encerrar. Histórico, resultados e interpretações alimentam a próxima escolha. Não há seleção de ferramenta por roteiro no código.
+
+O CLI aceita somente `--ip 127.0.0.1`. Nmap usa conexão TCP na porta 3000; HTTP aceita caminhos relativos sem proxies nem redirecionamentos. Limites: 20 propostas, até 40 chamadas de modelo, HTTP com prazo total de 8 s, Nmap com timeout de processo de 10 s, POST objeto JSON UTF-8 até 4 KiB e resposta HTTP até 16 KiB. Corpos extensos são reduzidos no contexto do modelo com truncamento explícito. JSON inválido, saída incompleta e falhas de log interrompem a operação. Detalhes em `docs/ENGENHARIA_BLOCO02.md`.
+
+Logs exigem arquivos 0600 em diretório privado 0700, sem links; o CLI exige extensão `.jsonl`, ignorada pelo Git. Se `logs/` já existir com permissões compartilhadas, revise a propriedade e restrinja seu acesso antes de executar. Senhas/tokens em campos reconhecidos são redigidos, mas texto livre pode conter dados sensíveis: use somente dados de laboratório e revise antes de compartilhar. IDs ligam proposta, execução, resultado, interpretação e decisões; o modelo pode interpretar incorretamente mesmo retornando JSON válido.
+
+Para ensaio técnico interativo, use `python3 agent.py --engenharia --ip 127.0.0.1 --log logs/engenharia-interativa.jsonl`. Essa opção identifica engenharia e não afirma aprovação do plano acadêmico; mantém a revisão antes de toda ação. O modo acadêmico continua exigindo a confirmação do plano pelo grupo.
 
 ## Restauração
 
@@ -32,4 +38,4 @@ Cada ciclo gera proposta JSON, mostra-a e solicita aprovação, modificação (s
 
 ## Testes
 
-`python3 -m unittest discover -s tests -v`. São testes locais automatizados, com servidor simulado e modelo simulado; não provam operação real do Docker, Ollama ou Kali. Consulte `relatorio_template.md`, `roteiro_video.md` e `CHECKLIST_RUBRICA.md`.
+`python3 -m unittest discover -s tests -v` executa os testes locais com fixtures e mocks explicitamente identificados; as integrações reais são ignoradas por padrão. Com serviços ativos e autorização para as leituras técnicas, `KIT11_REAL_TESTS=1 python3 -m unittest discover -s tests -p test_engineering_real.py -v` consulta Ollama/Qwen, HTTP público local e Nmap reais. O gate automatizado desses testes não é decisão humana e não executa propostas condicionais A/B. Resultados e limitações observados estão em `docs/ENGENHARIA_BLOCO02.md`.
