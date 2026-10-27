@@ -1,5 +1,9 @@
 # Diagnóstico do KIT11 — 27/10/2026
 
+## Docker Rootless — reavaliação posterior
+
+Docker 29.4.2 Rootless e Nmap 7.94SVN foram instalados; o daemon Docker tradicional permanece inativo. Juice Shop responde em `127.0.0.1:3000`, com restauração de marcador descartável verificada. Ollama 0.40.11 responde apenas em `127.0.0.1:11434`; a chamada Python real a `qwen3:4b-instruct` retornou JSON válido. Regras e serviços observados antes/depois não apresentaram mudanças; acesso Kali continua pendente. Evidências em `docs/STATE.md`.
+
 ## Reavaliação do bloco 01 — 12:29 -03
 
 - **BLOQUEADO:** Docker em rede bridge pode criar regras de firewall e alterar encaminhamento; o usuário proibiu alterações em rede/firewall/NAT sem autorização adicional e pediu interrupção diante de risco aos serviços. Antes de qualquer instalação, `sudo -n iptables -S FORWARD` indicou `ACCEPT` e `sudo -n sysctl net.ipv4.ip_forward` indicou `0`. Nenhuma instalação ou mudança de rede foi feita. Detalhes e pendências em `docs/STATE.md`.
