@@ -1,9 +1,9 @@
 # AF Tecnologias Hackers — Plano de testes e investigações (KIT11)
 
-**Versão:** 1.0 — planejamento para revisão do grupo  
-**Estado:** PLANEJADO; execução acadêmica e aprovação formal ainda não registradas  
+**Versão:** 1.0 — hipóteses e estratégia H1–H3 preservadas; atualização somente de registro de aprovação  
+**Estado:** APROVAÇÃO DO CONTEÚDO DECLARADA PELO GRUPO em comunicação de 27/10/2026; identificação dos presentes, data/hora da deliberação e portão de isolamento WAN ainda pendentes de documentação. **Investigações acadêmicas não executadas.**  
 **Data do planejamento:** 27/10/2026  
-**Responsáveis e aprovação:** integrantes: [preencher]; data/hora da deliberação: [preencher]; decisão: [APROVAR / AJUSTAR / REJEITAR]; justificativa e referência à versão aprovada: [preencher].
+**Responsáveis e aprovação:** o responsável informou que o grupo já aprovou o planejamento; integrantes e data/hora original da reunião: [a registrar]; referência do conteúdo técnico aprovado: `plano_humano.md` existente no commit `3cdb951`. A declaração não substitui os dados faltantes nem comprova autoria/cronologia pré-LLM.
 
 > **Objetivo:** conduzir três investigações distintas e reprodutíveis exclusivamente contra o OWASP Juice Shop local, empregando conhecimentos de reconhecimento, Nmap, requisições HTTP, autenticação, análise de respostas/logs e acesso a recursos. O Qwen3 4B deve propor ações condicionais; o grupo mantém o controle de cada execução e da interpretação final. Não há obrigação de descobrir vulnerabilidade: há obrigação de testar hipóteses e sustentar conclusões.
 
@@ -173,17 +173,18 @@ O objetivo é **cobrir todos os critérios**, não garantir nota. Se uma hipóte
 
 ### Portão acadêmico / validação do grupo
 
-- [ ] Integrantes revisaram H1–H3, os controles, limites e procedimentos de segurança.
-- [ ] Registradas eventuais alterações e sua justificativa.
-- [ ] Confirmado o entendimento com o professor sobre a exigência formal de planejamento inicial sem apoio do LLM, conforme seção 3 da AF; **não registrar uma sequência/autoria que não ocorreu**.
-- [ ] Verificados acesso atual Kali → Juice Shop e isolamento em relação à WAN, sem exposição indevida.
-- [ ] Plano aprovado por integrantes do grupo, com data, nomes e commit de referência.
-- [ ] Reservados logs privados e realizadas as restaurações autorizadas antes de cada investigação.
+- [x] **Aprovação do conteúdo declarada pelo grupo**, conforme informação comunicada pelo responsável em 27/10/2026. O conteúdo técnico H1–H3 não foi alterado neste registro.
+- [ ] Identificar integrantes que participaram, data/hora original da deliberação, eventuais alterações e referência verificável da aprovação.
+- [ ] Confirmar com o professor, quando aplicável, o tratamento da exigência de planejamento inicial sem LLM; **não atribuir falsamente autoria ou cronologia**.
+- [x] Acesso Kali/OpenVPN → Juice Shop `10.0.80.3:3001` observado com HTTP 200, conforme resultado fornecido pelo grupo.
+- [ ] Comprovar o isolamento WAN: as capturas das regras WAN/NAT não mostram liberação/encaminhamento de TCP/3001, mas ainda falta teste negativo pelo caminho externo **sem VPN** e conferência de outras regras aplicáveis.
+- [ ] Antes de cada investigação, registrar revisão/aprovação da versão no terminal (nomes, data e justificativa), manter logs privados e confirmar restauração apenas do container autorizado.
 
-**Sem esses itens, este arquivo continua um plano proposto e não uma execução autorizada.**
+**Aprovação comunicada não equivale a execução liberada:** o portão de rede permanece PENDENTE, e os dados da deliberação devem ser registrados fielmente.
 
-**Aprovação do grupo:** [pendente]  
-**Data/hora:** [pendente]  
-**Integrantes presentes:** [pendente]  
-**Versão/commit aprovado:** [pendente]  
-**Alterações solicitadas e razões:** [pendente]
+**Aprovação do grupo:** SIM, segundo declaração do responsável comunicada em 27/10/2026.  
+**Data/hora real da deliberação:** [não informada; preencher com dado verdadeiro]  
+**Integrantes presentes:** [não informados; preencher com nomes verdadeiros]  
+**Versão de referência do conteúdo aprovado:** `plano_humano.md` presente no commit `3cdb951` (a edição atual não altera H1–H3).  
+**Alterações deliberadas e justificativas:** [não informadas; não presumir ausência]  
+**Evidência complementar de aprovação/ata:** [pendente, se disponível]
