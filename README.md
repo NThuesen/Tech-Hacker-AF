@@ -1,6 +1,17 @@
 # KIT11-AF
 
-Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requisitos.md` e `PENDENCIAS.md`. O plano em `plano_humano.md` deve ser preenchido e aprovado pelo grupo antes da primeira consulta ao LLM. Não há experimentos definitivos neste repositório.
+Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requisitos.md` e `PENDENCIAS.md`. O planejamento original está em `plano_humano.md`. **As três investigações técnicas do Bloco 03 já foram executadas** e possuem resumos em `docs/investigacoes/`; aceite acadêmico e materiais finais ainda exigem revisão. Um refinamento complementar, **Bloco 03B**, está somente **planejado**, não implementado nem executado.
+
+## Próxima implementação: Bloco 03B (planejado, não executado)
+
+A proposta de melhoria é **corrigir o controle negativo da INV-03**, adicionar comparação A/B/C da INV-02 e verificar a seleção condicionada do Qwen na INV-01, com histórico factual e supervisão genuína. **Não executar experimentos, não modificar o plano original e não publicar logs automaticamente** nesta etapa de desenvolvimento.
+
+1. [Plano experimental complementar — 03B](docs/PLANO_REFINAMENTO_BLOCO03B.md) — hipóteses, controles, segurança e matriz da rubrica.
+2. [Backlog implementável e testes](tasks/03b-refinamento-experimental.md) — P0–P4, Definition of Done; P5 depende de nova autorização.
+3. [Handoff e instrução para Codex](docs/HANDOFF_CODEX_BLOCO03B.md) — ordem de leitura, branch de trabalho, escopo e comando futuro.
+4. [Análise das execuções originais](docs/investigacoes/ANALISE_BLOCO03.md) e [matriz de evidências](docs/investigacoes/MATRIZ_EVIDENCIAS.md).
+
+A branch `evidencias/logs-completos-2026-10-27` preserva o snapshot histórico das execuções. Não fazer merge automático dos logs na `main`.
 
 ## Preparação
 
