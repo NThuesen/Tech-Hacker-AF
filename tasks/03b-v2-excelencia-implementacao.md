@@ -6,6 +6,9 @@
 
 ## Trabalho proposto por prioridade — cada item tem teste de aceite
 
+**Orquestração para o Codex:** a rota principal é [`docs/03b/INDEX.md`](../docs/03b/INDEX.md). Implemente **todos os itens P0–P5** sem deixar integração, testes ou documentação para Nicholas; as notas A01/A02 definem regras/interfaces e A03–A09 definem cada entrega. Use **uma nota por vez**, lendo arquivos de implementação reais. A10/P6 só documenta o que exige autorização humana posterior. Sem branch nova automática ou publicação de código sem confirmação.
+
+
 ### P0. Reconciliação, versionamento e separação de modos
 
 - [ ] Verificar `git status`, upstream, código local mais novo e estado do KIT11; recusar sobrescrita de alterações não publicadas. **Não criar branch automaticamente**; qualquer publicação futura de código exige autorização de Nicholas.
