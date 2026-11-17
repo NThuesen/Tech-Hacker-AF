@@ -2,6 +2,12 @@
 
 **Estado:** prompt de programação futuro. Não equivale a autorização de testes reais, restauração, instalação, alteração de rede ou publicação. A v2 ainda depende de aprovação pelo grupo.
 
+## Entrada canônica: notas atômicas (17/11/2026)
+
+**Ler primeiro [`docs/03b/INDEX.md`](03b/INDEX.md)**. Esse índice distribui toda a programação **P0–P5** entre A01–A09 e mantém A10/P6 somente como portões humanos futuros. O Codex deve executar **todo o desenvolvimento** e a verificação com fixtures, sem aguardar Nicholas para escolhas técnicas triviais. Leia apenas a nota da fase corrente, seus arquivos de código e testes; não precisa carregar todos os textos de uma vez. As notas são contratos executáveis de aceite, enquanto este handoff é um atalho. Nenhuma branch nova deve ser criada por padrão.
+
+> **Prompt curto preferencial:** Leia `AGENTS.md`, `docs/STATE.md` e `docs/03b/INDEX.md`. Implemente completamente P0–P5 das notas atômicas A01–A09, incluindo código, testes simulados e documentação, corrigindo erros de regressão. Não execute P6, rede/LLM reais, restauração ou ações de ferramenta. Preserve logs/modos antigos e decisões humanas. Mostre o resultado dos testes e solicite autorização específica antes de publicar código.
+
 ## Ler em sequência
 
 1. `AGENTS.md`, `docs/INDEX.md`, `docs/STATE.md`, `PLANS.md`.
