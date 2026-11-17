@@ -11,6 +11,10 @@
 | `docs/STATE.md` | primeira leitura de cada sessão; estado real vs. pendente |
 | `docs/ENGENHARIA_BLOCO02.md` | comandos, IDs e limitações dos ensaios técnicos do agente |
 | `docs/investigacoes/ANALISE_BLOCO03.md` | resultados reais INV-01/02/03, limitações e matriz de evidências |
+| `docs/PLANO_03B_EXCELENCIA_V2.md` | proposta prioritária v2 do refinamento 03B; publicada, ainda não aprovada/executada |
+| `tasks/03b-v2-excelencia-implementacao.md` | backlog de programação P0–P5 com fixtures; P6 é etapa real e não autorizada |
+| `docs/HANDOFF_CODEX_03B_EXCELENCIA_V2.md` | prompt e limites para Codex implementar v2 futuramente |
+| `docs/PLANO_REFINAMENTO_BLOCO03B.md` | proposta v1 preservada para rastreabilidade histórica |
 | `docs/OPERACAO_DELEGADA_BLOCO03.md` | modo delegado autorizado por Nicholas, critérios e distinção de decisões |
 | `docs/OPERACAO_BLOCO03.md` | comandos INV-01/02/03, portões humanos, síntese privada e rastreabilidade |
 | `docs/CONTEXT.md` | consulta de infraestrutura histórica |
