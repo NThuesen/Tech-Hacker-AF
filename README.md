@@ -4,6 +4,12 @@ Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requ
 
 ## Próxima implementação: Bloco 03B (planejado, não executado)
 
+**Proposta prioritária v2 (17/11/2026, somente documentação publicada):** o refinamento foi ampliado para auditar a sensibilidade das decisões do Qwen às evidências, comparar histórico atual e ledger factual, revisar controles A/B/C e extensão/existência, e definir métricas e roteiro de relato. **V2 não aprovada pelo grupo, não implementada e não executada.** A publicação foi autorizada por Nicholas diretamente na `main`, sem criação de branches. Os documentos anteriores seguem como histórico.
+
+- [Plano acadêmico e experimental v2](docs/PLANO_03B_EXCELENCIA_V2.md) — perguntas de pesquisa, dois trilhos separados, segurança e rubrica.
+- [Backlog técnico v2 para Codex](tasks/03b-v2-excelencia-implementacao.md) — P0–P5 de programação/fixtures; P6 depende de autorização futura.
+- [Handoff Codex v2](docs/HANDOFF_CODEX_03B_EXCELENCIA_V2.md) — prompt para implementação futura, sem executar ferramentas reais.
+
 A proposta de melhoria é **corrigir o controle negativo da INV-03**, adicionar comparação A/B/C da INV-02 e verificar a seleção condicionada do Qwen na INV-01, com histórico factual e supervisão genuína. **Não executar experimentos, não modificar o plano original e não publicar logs automaticamente** nesta etapa de desenvolvimento.
 
 1. [Plano experimental complementar — 03B](docs/PLANO_REFINAMENTO_BLOCO03B.md) — hipóteses, controles, segurança e matriz da rubrica.
