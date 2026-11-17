@@ -4,6 +4,8 @@ Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requ
 
 ## Próxima implementação: Bloco 03B (planejado, não executado)
 
+**Início recomendado para o Codex:** [índice de notas atômicas 03B v2](docs/03b/INDEX.md). O Codex implementa integralmente P0–P5 por etapas, lendo cada nota conforme necessário; P6 exige aprovação humana específica. Não é preciso que Nicholas programe manualmente.
+
 **Proposta prioritária v2 (17/11/2026, somente documentação publicada):** o refinamento foi ampliado para auditar a sensibilidade das decisões do Qwen às evidências, comparar histórico atual e ledger factual, revisar controles A/B/C e extensão/existência, e definir métricas e roteiro de relato. **V2 não aprovada pelo grupo, não implementada e não executada.** A publicação foi autorizada por Nicholas diretamente na `main`, sem criação de branches. Os documentos anteriores seguem como histórico.
 
 - [Plano acadêmico e experimental v2](docs/PLANO_03B_EXCELENCIA_V2.md) — perguntas de pesquisa, dois trilhos separados, segurança e rubrica.
