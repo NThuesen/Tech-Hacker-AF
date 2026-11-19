@@ -13,7 +13,9 @@ import signal
 import subprocess
 import sys
 import stat
+import termios
 import time
+import tty
 import uuid
 import urllib.error
 import urllib.parse
@@ -233,12 +235,15 @@ def recent_history(objective, history):
 
 
 def model_call(objective, history, context=None):
-    return validate_proposal(model_request(
-        'Escolha uma única ferramenta e parâmetros com base no objetivo e nas evidências anteriores. '
+    instruction = ('Escolha uma única ferramenta e parâmetros com base no objetivo e nas evidências anteriores. '
         'Não há roteiro fixo. Ferramentas: nmap (parametros {}), http_get (path relativo), '
         'http_post (path relativo, body objeto JSON em texto). O alvo fixo é 127.0.0.1:3000. '
         'A interpretacao desta proposta avalia o histórico anterior. Seja conciso, até 60 palavras por campo textual. '
-        'Nenhuma ferramenta será executada sem revisão.',
+        'Nenhuma ferramenta será executada sem revisão.')
+    if context is not None:
+        instruction += (' Em interpretacao, justifique a escolha citando a evidência disponível ou '
+                        'informando que ainda não há evidência; não invente resultados.')
+    return validate_proposal(model_request(instruction,
         recent_history(objective, history) if context is None else context, PROPOSAL_SCHEMA))
 
 
@@ -296,6 +301,88 @@ def human_text(prompt, input_fn):
         print('Informe de 1 a 2000 caracteres.')
 
 
+def read_key(prompt):
+    """Uma tecla no terminal real, restaurando o modo mesmo em interrupção."""
+    fd = sys.stdin.fileno()
+    previous = termios.tcgetattr(fd)
+    try:
+        tty.setcbreak(fd)
+        print(prompt, end='', flush=True)
+        key = sys.stdin.read(1)
+        if not key:
+            raise EOFError('terminal encerrado')
+        print(key.upper(), flush=True)
+        return key.lower()
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, previous)
+
+
+def display_action(proposal, source):
+    """Mostra parâmetros efetivos e riscos da ação que será confirmada."""
+    print(f'Proposta e justificativa ({source}; não são fatos confirmados):', json.dumps(proposal, ensure_ascii=True))
+    if proposal['ferramenta'] == 'nmap':
+        fixed = {'alvo': '127.0.0.1', 'porta': 3000,
+                 'argumentos': ['-sT', '-Pn', '-n', '-p', '3000', '--max-retries', '1', '--host-timeout', '8s']}
+    else:
+        fixed = {'alvo': '127.0.0.1:3000', 'metodo': 'GET' if proposal['ferramenta'] == 'http_get' else 'POST',
+                 'parametros': proposal['parametros']}
+    print('Ferramenta, alvo e argumentos efetivos:', json.dumps(fixed, ensure_ascii=True))
+    risks = {'nmap': 'conexão TCP de reconhecimento pode gerar registros no serviço',
+             'http_get': 'leitura HTTP pode revelar dados ou gerar registros',
+             'http_post': 'POST pode alterar estado e gera tentativa de autenticação'}
+    print('Riscos e limites:', risks[proposal['ferramenta']] + '; somente 127.0.0.1:3000, '
+          'escopo por cenário, tempo e saída limitados; redirecionamentos não são seguidos.')
+
+
+def quick_review(proposal, objective, scenario, history, audit_fn):
+    """Revisão humana 03B; P pausa sem autorizar e M exige confirmação."""
+    validate_proposal(proposal)
+    print('\nInvestigação e objetivo:', json.dumps({'investigacao': scenario, 'objetivo': objective}, ensure_ascii=True))
+    display_action(proposal, 'modelo')
+    evidence = [h for h in history if h.get('result_id')]
+    print('Evidências anteriores (dados não confiáveis; truncagem indicada):',
+          json.dumps(recent_history(objective, evidence)['historico'], ensure_ascii=True))
+    def paused():
+        audit_fn('decisao_humana', decisao='pausada', justificativa=None, acao_final=None,
+                 origem='entrada_terminal')
+        while True:
+            answer = read_key('Pausado: [C] continuar revisão / [E] encerrar: ')
+            if answer == 'c':
+                return False
+            if answer == 'e':
+                return True
+    while True:
+        choice = read_key('[A] Aprovar / [M] Modificar / [R] Rejeitar / [P] Pausar: ')
+        if choice == 'a':
+            return 'aprovada', proposal
+        if choice == 'r':
+            return 'rejeitada', None
+        if choice == 'p':
+            if paused():
+                return 'encerrada', None
+            continue
+        if choice != 'm':
+            continue
+        try:
+            changed = validate_proposal(parse_json(input('JSON completo da ação modificada: ')))
+        except (ValueError, json.JSONDecodeError) as exc:
+            audit_fn('modificacao_invalida', erro=str(exc))
+            print('Modificação inválida:', str(exc))
+            continue
+        print('Ação modificada pelo supervisor; será revalidada quanto ao escopo:')
+        display_action(changed, 'modificação do supervisor')
+        audit_fn('modificacao_validada', acao_modificada=changed)
+        while True:
+            confirmation = read_key('Confirmar ação modificada [A], rejeitar [R] ou pausar [P]: ')
+            if confirmation == 'a':
+                audit_fn('confirmacao_modificacao_humana', acao_final=changed, origem='entrada_terminal')
+                return 'modificada_aprovada', changed
+            if confirmation == 'r':
+                return 'modificada_rejeitada', changed
+            if confirmation == 'p' and paused():
+                return 'encerrada', None
+
+
 def run_session(objective, host, path, input_fn=None, engineering=False, plan_confirmed=False,
                 investigation_id=None, run_id=None, max_actions=None, action_guard=None, reviewer=None, result_guard=None,
                 session_metadata=None, context_provider=None, result_observer=None):
@@ -311,6 +398,9 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                 or max_actions != 6 or action_guard is None or result_guard is None
                 or result_observer is None or context_provider is None):
             raise ValueError('03B exige cenário, limites e guardas de sessão completos')
+        supervisor = session_metadata.get('supervisor')
+        if not isinstance(supervisor, str) or not supervisor.strip() or len(supervisor) > 200:
+            raise ValueError('03B exige identificação do supervisor presente no terminal')
     input_source = 'codex_delegado' if reviewer else ('entrada_injetada_teste' if input_fn is not None else 'entrada_terminal')
     input_fn = input_fn or input
     if host != '127.0.0.1':
@@ -375,9 +465,13 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
                          acao_final=second['acao_final'], justificativa=second.get('justificativa'),
                          request_id=second.get('request_id'), origem=input_source)
             else:
-                decision, action = review(proposal, input_fn, lambda kind, **fields: emit(kind, **refs, **fields),
-                                          trace_confirmation=bool(session_metadata and session_metadata.get('phase') == '03B'))
-                reason = human_text('Justificativa da decisão: ', input_fn)
+                if session_metadata and session_metadata.get('phase') == '03B':
+                    decision, action = quick_review(proposal, objective, session_metadata['scenario'], history,
+                                                    lambda kind, **fields: emit(kind, **refs, **fields))
+                    reason = None  # A ação é a decisão; nenhuma justificativa é inventada.
+                else:
+                    decision, action = review(proposal, input_fn, lambda kind, **fields: emit(kind, **refs, **fields))
+                    reason = human_text('Justificativa da decisão: ', input_fn)
             emit('decisao_delegada' if reviewer else 'decisao_humana', **refs, decisao=decision, justificativa=reason, acao_final=action,
                  origem=input_source)
             if decision == 'encerrada':

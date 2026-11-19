@@ -55,6 +55,12 @@ def main(argv=None):
                   tipo_execucao='academica', **meta, **fields)
     try:
         emit('preparacao', estado='PENDENTE')
+        supervisor = required('Nome e sobrenome do integrante que supervisionará esta sessão no terminal: ')
+        if len(supervisor) > 200:
+            raise ValueError('nome do supervisor excede limite')
+        confirm('O integrante identificado está presente e assume as decisões? Digite ASSUMO: ', 'ASSUMO')
+        meta['supervisor'] = supervisor
+        emit('supervisor_identificado', origem='entrada_terminal_humana', identidade='autodeclarada')
         print(f'Plano anterior SHA256={old_sha}; plano v2 SHA256={plan_sha}; commit={code_commit}')
         people = required('Integrantes responsáveis pela aprovação desta versão: ')
         date = required('Data e referência verdadeira da decisão: ')
