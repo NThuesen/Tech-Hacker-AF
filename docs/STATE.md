@@ -1,5 +1,14 @@
 # Estado atual e handoff
 
+## Rede 03B — relato de Nicholas em 19/11/2026
+
+- **Kali/VPN, 11:58:27 -03:** Nicholas informou Kali `172.16.50.203/24`, `tun0` `10.8.0.2/24`, rota para `10.0.80.3` via `10.8.0.1` em `tun0`, Juice Shop HTTP 200 e `curl_exit=0`.
+- **WAN sem VPN, 11:59:17 -03:** Nicholas informou `tun0` ausente, rota para `192.168.20.31` via `172.16.50.1` em `eth0` e teste `http://192.168.20.31:3001/` com HTTP 000, timeout após 3000 ms e `curl_exit=28`. O resultado vale para o caminho e momento relatados; **isolamento absoluto NÃO VERIFICADO**.
+- **Origem:** relato do usuário; o Codex não executou os testes no Kali. Nicholas informou que os arquivos primários existem no Kali e que as capturas das regras WAN/NAT são anteriores; não forneceu caminhos, arquivos ou capturas atuais ao KIT11. Pasta privada `logs/03B/rede-20261119/` preparada com `0700`; referências, cópias e hashes permanecem **PENDENTES**. Detalhes em [evidências de rede 03B](03b/EVIDENCIAS_REDE_2026-11-19.md).
+- **KIT11, 12:01:57 -03:** leituras confirmaram container `8be0a5edf7496ab70740087f2c6912c8b6d386a9755a314592078129d4e9ed11` em execução, imagem/configuração Rootless validadas, bindings previstos e Qwen local identificado. Nenhuma restauração ou ferramenta de investigação foi executada pelo Codex. Regras WAN/NAT atuais, aprovação acadêmica documentada e confirmação específica de restauração continuam portões para operação.
+- **INV-01-B/02-B/03-B:** **PENDENTES**; supervisor deverá decidir pessoalmente cada proposta pelo terminal. Relatório, matriz comparativa e roteiro com resultados 03B novos não foram preenchidos sem dados.
+- **Verificações:** `env -u KIT11_REAL_TESTS python3 -m unittest discover -s tests -v` descobriu 92 testes: 89 passaram e três integrações reais opt-in foram ignoradas. `py_compile`, `sh -n`, `git diff --check` e dry-run offline passaram. Auditoria somente estrutural das três sessões históricas principais: INV-01 33 eventos/0 lacunas/3 decisões delegadas, INV-02 25/0/2 e INV-03 33/0/3; isso não comprova correção semântica nem supervisão humana das novas sessões.
+
 ## Sessão — supervisão humana simplificada, 03B v2
 
 - **Atualização às 11:30 -03 em 19/11:** Nicholas informou que iniciou o container e fará os testes Kali/VPN posteriormente. `docker ps` e `ss -lnt` mostraram o mesmo `kit11-juice` em execução com bindings `127.0.0.1:3000` e `10.0.80.3:3001`; `lab_preflight` e `lab_container_id`, em leitura, validaram Rootless, imagem e configuração do ID `8be0a5edf7496ab70740087f2c6912c8b6d386a9755a314592078129d4e9ed11`. O Codex não iniciou nem restaurou o container. Os resultados Kali/VPN e WAN atuais e suas referências não foram fornecidos; portão de rede **PENDENTE**.
