@@ -2,9 +2,11 @@
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import MagicMock, patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from af_03b_controls import ScenarioGuard, factual_context
+import agent
 
 
 def action(tool, params):
@@ -59,6 +61,31 @@ class ControlsTests(unittest.TestCase):
         self.assertIsNone(guard.check(positive))
         with self.assertRaises(ValueError):
             guard.check(positive)
+
+    def test_listing_with_short_content_length_is_not_accepted(self):
+        guard = ScenarioGuard('INV-03-B')
+        listing = action('http_get', {'path': '/ftp/'})
+        target = action('http_get', {'path': '/ftp/arquivo-inexistente-af.md'})
+        guard.observe(listing, {'status': 200, 'truncated': False, 'headers': {'Content-Length': '99'},
+                                'body': '<html>listing</html>', 'bytes_recebidos': 20}, listing_verified=True)
+        with self.assertRaises(ValueError):
+            guard.check(target)
+        guard.observe(listing, {'status': 200, 'truncated': False, 'headers': {'Content-Length': '99'},
+                                'body': '<html>listing</html>', 'bytes_recebidos': 99}, listing_verified=True)
+        with self.assertRaises(ValueError):
+            guard.check(target)
+
+    def test_http_short_body_is_marked_incomplete(self):
+        response = MagicMock(status=200)
+        response.getheaders.return_value = [('Content-Length', '99')]
+        response.read.return_value = b'abc'
+        conn = MagicMock()
+        conn.getresponse.return_value = response
+        with patch.object(agent.http.client, 'HTTPConnection', return_value=conn):
+            result = agent.execute(action('http_get', {'path': '/ftp/'}), '127.0.0.1')
+        self.assertEqual(result['bytes_recebidos'], 3)
+        self.assertTrue(result['truncated'])
+        self.assertTrue(result['content_length_divergente'])
 
     def test_scenario_01_rejects_post_and_unlisted_routes(self):
         guard = ScenarioGuard('INV-01-B')

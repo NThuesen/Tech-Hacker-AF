@@ -24,6 +24,10 @@ Apresentar o resultado `36e3c3e4cc8443dda703cda8ee39d3c8`: tamanho anunciado 801
 
 ## 8:15–9:15 — Conclusão e limites
 
-Reforçar a distinção entre saída, interpretação e decisão. A operação delegada não prova intervenção humana individual; a adequação da adaptação ao enunciado precisa ser validada pelo professor. Mostrar fontes e IDs; informar que WAN atual, sessões 03B ao vivo e vídeo final precisam de verificação. Encerrar sem prometer vulnerabilidades não demonstradas.
+Reforçar a distinção entre saída, interpretação e decisão. A operação delegada não prova intervenção humana individual; a adequação da adaptação ao enunciado precisa ser validada pelo professor. Mostrar fontes e IDs; informar que as evidências originais Kali precisam de arquivamento e revisão, que o controle `.md` ficou inconclusivo e que o vídeo final precisa de gravação. Encerrar sem prometer vulnerabilidades não demonstradas.
 
 Antes de gravar, revisar tela, dados pessoais, credenciais e trechos de logs. Após gravar, conferir inteligibilidade, correspondência com evidências e duração real inferior a dez minutos.
+
+## Complemento 03B — atualizar apresentação antes da gravação
+
+Na INV-01-B, Nicholas decidiu pessoalmente três GETs (todos HTTP 200). Nas INV-02-B e INV-03-B, o Codex decidiu por delegação: A/B/C retornaram 401 com corpos iguais; duas tentativas da listagem `/ftp/` tiveram 11025 bytes contra 11079 declarados. O controle `.md` não foi executado. Mostrar [matriz comparativa](docs/03b/MATRIZ_COMPARATIVA.md), distinguir o relato de Nicholas sobre testes Kali/VPN e WAN de verificações feitas pelo Codex e manter pendente o aceite acadêmico da delegação. A gravação ainda não ocorreu.

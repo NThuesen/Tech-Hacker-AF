@@ -98,8 +98,16 @@ class ScenarioGuard:
             self.listing = None
             self.listed_names = set()
             body = result.get('body')
+            headers = result.get('headers', {})
+            declared = next((v for k, v in headers.items() if k.lower() == 'content-length'), None) if isinstance(headers, dict) else None
+            expected_bytes = int(declared) if isinstance(declared, str) and declared.isdecimal() else None
+            received_bytes = result.get('bytes_recebidos')
+            if received_bytes is None and isinstance(body, str):
+                received_bytes = len(body.encode('utf-8'))
             if (listing_verified is True and result.get('status') == 200 and result.get('truncated') is False
-                    and isinstance(body, str) and body.strip()):
+                    and isinstance(body, str) and body.strip()
+                    and len(body.encode('utf-8')) == received_bytes
+                    and (expected_bytes is None or received_bytes == expected_bytes)):
                 # Entidades HTML e URL podem representar nomes sem texto literal.
                 normalized = body
                 for _ in range(3):

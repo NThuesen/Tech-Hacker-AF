@@ -160,7 +160,12 @@ def execute(action, host, port=3000):
                 data = response.read(MAX_BODY + 1)
                 headers = {k: v[:1024] for k, v in response.getheaders()
                            if k.lower() in {'content-type', 'content-length', 'date'}}
-                return redact({'status': response.status, 'headers': headers, 'body': data[:MAX_BODY].decode('utf-8', 'replace'), 'truncated': len(data) > MAX_BODY, 'redirect_followed': False})
+                declared = next((v for k, v in headers.items() if k.lower() == 'content-length'), None)
+                expected_bytes = int(declared) if isinstance(declared, str) and declared.isdecimal() else None
+                incomplete = expected_bytes is not None and len(data) < expected_bytes
+                return redact({'status': response.status, 'headers': headers, 'body': data[:MAX_BODY].decode('utf-8', 'replace'),
+                               'truncated': len(data) > MAX_BODY or incomplete, 'bytes_recebidos': len(data),
+                               'content_length_divergente': incomplete, 'redirect_followed': False})
             finally:
                 conn.close()
     except (OSError, subprocess.TimeoutExpired, http.client.HTTPException) as exc:
@@ -530,7 +535,7 @@ def run_session(objective, host, path, input_fn=None, engineering=False, plan_co
             history_item = {**refs, 'proposta': proposal, 'decisao': decision, 'acao': action,
                             'resultado': result, 'interpretacao_resultado': interpretation,
                             'avaliacao_revisor': after_reason}
-            if session_metadata and session_metadata.get('phase') == '03B':
+            if session_metadata and session_metadata.get('phase') in ('03B', '03B_delegado'):
                 history_item.update(run_id=common['run_id'], origem_avaliacao=input_source)
             history.append(history_item)
             if after == 'e' or result.get('status') == 429:
