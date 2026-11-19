@@ -1,6 +1,6 @@
 # Bloco 03B v2 — índice operacional de notas atômicas para o Codex
 
-**Estado:** especificação de implementação. **Não significa que o código ou os experimentos já existam.**
+**Estado atual:** P0–P5 implementados com fixtures; detalhes e limites em [operação](../OPERACAO_BLOCO03B_V2.md) e [estado](../STATE.md). As notas abaixo preservam a especificação histórica; P6 não foi executado nesta etapa.
 
 ## Objetivo do Codex desenvolvedor
 

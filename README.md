@@ -1,16 +1,16 @@
 # KIT11-AF
 
-Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requisitos.md` e `PENDENCIAS.md`. O planejamento original está em `plano_humano.md`. **As três investigações técnicas do Bloco 03 já foram executadas** e possuem resumos em `docs/investigacoes/`; aceite acadêmico e materiais finais ainda exigem revisão. Um refinamento complementar, **Bloco 03B**, está somente **planejado**, não implementado nem executado.
+Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requisitos.md` e `PENDENCIAS.md`. O planejamento original está em `plano_humano.md`. **As três investigações técnicas do Bloco 03 já foram executadas** e possuem resumos em `docs/investigacoes/`; as decisões por ação foram delegadas ao Codex e a adequação acadêmica depende de revisão. O **Bloco 03B v2** está implementado e validado com fixtures; sessões ao vivo continuam pendentes.
 
-## Próxima implementação: Bloco 03B (planejado, não executado)
+## Bloco 03B: operação e estado
 
-**Início recomendado para o Codex:** [índice de notas atômicas 03B v2](docs/03b/INDEX.md). O Codex implementa integralmente P0–P5 por etapas, lendo cada nota conforme necessário; P6 exige aprovação humana específica. Não é preciso que Nicholas programe manualmente.
+Consulte [operação 03B v2](docs/OPERACAO_BLOCO03B_V2.md), [estado verificável](docs/STATE.md) e [notas atômicas](docs/03b/INDEX.md). O replay não executa ferramentas; sessões reais exigem preflight e evidências atuais de rede. O relatório preparado está em [Markdown](docs/RELATORIO_ENTREGA.md) e [PDF de cinco páginas](docs/RELATORIO_ENTREGA.pdf); vídeo e revisão acadêmica seguem pendentes.
 
-**Proposta prioritária v2 (17/11/2026, somente documentação publicada):** o refinamento foi ampliado para auditar a sensibilidade das decisões do Qwen às evidências, comparar histórico atual e ledger factual, revisar controles A/B/C e extensão/existência, e definir métricas e roteiro de relato. **V2 não aprovada pelo grupo, não implementada e não executada.** A publicação foi autorizada por Nicholas diretamente na `main`, sem criação de branches. Os documentos anteriores seguem como histórico.
+**Proposta prioritária v2:** compara decisões do Qwen, histórico e ledger, controles A/B/C e extensão/existência. Nicholas autorizou a implementação e delegou decisões ao Codex; essa delegação não comprova revisão acadêmica individual. O replay local com entradas simuladas foi executado e teve limitações de desenho e excesso do orçamento planejado, registrados em `docs/STATE.md`. Os documentos anteriores seguem como histórico.
 
 - [Plano acadêmico e experimental v2](docs/PLANO_03B_EXCELENCIA_V2.md) — perguntas de pesquisa, dois trilhos separados, segurança e rubrica.
 - [Backlog técnico v2 para Codex](tasks/03b-v2-excelencia-implementacao.md) — P0–P5 de programação/fixtures; P6 depende de autorização futura.
-- [Handoff Codex v2](docs/HANDOFF_CODEX_03B_EXCELENCIA_V2.md) — prompt para implementação futura, sem executar ferramentas reais.
+- [Handoff Codex v2](docs/HANDOFF_CODEX_03B_EXCELENCIA_V2.md) — contexto histórico e referências para revisão, sem executar ferramentas reais nesta etapa.
 
 A proposta de melhoria é **corrigir o controle negativo da INV-03**, adicionar comparação A/B/C da INV-02 e verificar a seleção condicionada do Qwen na INV-01, com histórico factual e supervisão genuína. **Não executar experimentos, não modificar o plano original e não publicar logs automaticamente** nesta etapa de desenvolvimento.
 

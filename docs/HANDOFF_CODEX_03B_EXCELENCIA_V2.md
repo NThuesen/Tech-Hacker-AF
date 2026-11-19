@@ -1,6 +1,6 @@
 # Handoff — Bloco 03B v2 (excelência acadêmica)
 
-**Estado:** prompt de programação futuro. Não equivale a autorização de testes reais, restauração, instalação, alteração de rede ou publicação. A v2 ainda depende de aprovação pelo grupo.
+**Estado atual:** implementação P0–P5 com fixtures, conforme [operação](OPERACAO_BLOCO03B_V2.md) e [estado](STATE.md). O prompt abaixo é histórico e não equivale a autorização de testes reais, restauração, instalação, alteração de rede ou publicação. A v2 ainda depende de aprovação acadêmica para P6.
 
 ## Entrada canônica: notas atômicas (17/11/2026)
 

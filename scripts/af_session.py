@@ -110,7 +110,7 @@ def confirm(prompt, token):
         raise ValueError('confirmação ausente; sessão encerrada sem aceite presumido')
 
 
-def prepare(inv, emit, directory):
+def prepare(inv, emit, directory, pre_restore_guard=None):
     plan = (ROOT / 'plano_humano.md').read_bytes()
     sha = hashlib.sha256(plan).hexdigest()
     commit = command(['git', 'rev-parse', 'HEAD'])
@@ -140,6 +140,10 @@ def prepare(inv, emit, directory):
              '. ./scripts/lab_common.sh\nprintf "%s %s\\n" "$LAB_IMAGE" "$LAB_IMAGE_ID"']))
     print('Estado inicial conhecido exige restauração. Cancelar preserva o container e encerra a preparação.')
     confirm('Oferecer restauração supervisionada agora? Digite OFERECER ou Enter para cancelar: ', 'OFERECER')
+    if hashlib.sha256((ROOT / 'plano_humano.md').read_bytes()).hexdigest() != sha:
+        raise ValueError('plano histórico mudou após aprovação; restauração cancelada')
+    if pre_restore_guard is not None:
+        pre_restore_guard()
     emit('restauracao_solicitada', container_anterior=before, origem='entrada_terminal')
     # restore.sh pede RESTAURAR, reinspeciona e remove pelo ID validado, mantendo bindings.
     subprocess.run([str(ROOT / 'scripts/restore.sh')], cwd=ROOT, check=True)

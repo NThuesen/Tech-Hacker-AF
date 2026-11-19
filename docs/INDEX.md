@@ -10,6 +10,7 @@
 | `PROMPTS.md` | iniciar uma sessão curta sem repetir um mega-prompt |
 | `docs/STATE.md` | primeira leitura de cada sessão; estado real vs. pendente |
 | `docs/03b/INDEX.md` | **entrada principal do Codex** para programação integral P0–P5 em notas atômicas; P6 separado |
+| `docs/OPERACAO_BLOCO03B_V2.md` | comandos implementados para sessão 03B, replay e métricas; limites e pré-condições |
 | `docs/ENGENHARIA_BLOCO02.md` | comandos, IDs e limitações dos ensaios técnicos do agente |
 | `docs/investigacoes/ANALISE_BLOCO03.md` | resultados reais INV-01/02/03, limitações e matriz de evidências |
 | `docs/PLANO_03B_EXCELENCIA_V2.md` | proposta prioritária v2 do refinamento 03B; publicada, ainda não aprovada/executada |

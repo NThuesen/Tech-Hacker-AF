@@ -68,7 +68,7 @@ def audit(events):
             proposals[pid] = e
         elif kind == 'modificacao_validada':
             modifications[pid] = e.get('acao_modificada')
-        elif kind == 'confirmacao_modificacao_delegada':
+        elif kind in ('confirmacao_modificacao_delegada', 'confirmacao_modificacao_humana'):
             confirmations[pid] = e.get('acao_final')
         elif kind in ('decisao_humana', 'decisao_delegada'):
             if pid not in proposals:
@@ -80,6 +80,9 @@ def audit(events):
                         modifications.get(pid) != e.get('acao_final')
                         or confirmations.get(pid) != e.get('acao_final')):
                     issues.append('modificação delegada sem validação/segunda aprovação: ' + e['event_id'])
+            if kind == 'decisao_humana' and e.get('phase') == '03B' and e.get('decisao') == 'modificada_aprovada' and (
+                    modifications.get(pid) != e.get('acao_final') or confirmations.get(pid) != e.get('acao_final')):
+                issues.append('modificação humana 03B sem validação/segunda aprovação: ' + e['event_id'])
             if e.get('decisao') in ('aprovada', 'modificada_aprovada'):
                 approvals[pid] = e
         elif kind == 'execucao':
@@ -159,7 +162,7 @@ def summarize(path):
              '| Evento / ID | Conteúdo registrado (origem preservada) |', '|---|---|']
     relevant = {'aprovacao_plano', 'portao_rede', 'preflight', 'restauracao', 'pronto',
                 'decisao_humana', 'decisao_delegada', 'conclusao_delegada', 'autorizacao_delegacao',
-                'confirmacao_modificacao_delegada', 'modificacao_validada', 'modificacao_invalida', 'resultado',
+                'confirmacao_modificacao_delegada', 'confirmacao_modificacao_humana', 'modificacao_validada', 'modificacao_invalida', 'resultado',
                 'interpretacao', 'decisao_pos_interpretacao', 'conclusao_humana',
                 'erro_modelo', 'erro_interpretacao', 'interrompida',
                 'acao_bloqueada', 'parada_seguranca',
