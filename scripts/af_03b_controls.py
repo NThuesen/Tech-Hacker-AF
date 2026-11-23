@@ -102,6 +102,12 @@ class ScenarioGuard:
             declared = next((v for k, v in headers.items() if k.lower() == 'content-length'), None) if isinstance(headers, dict) else None
             expected_bytes = int(declared) if isinstance(declared, str) and declared.isdecimal() else None
             received_bytes = result.get('bytes_recebidos')
+            capture = result.get('captura_http')
+            if capture is not None and (
+                    not isinstance(capture, dict)
+                    or capture.get('enquadramento') not in ('content_length', 'chunked')
+                    or capture.get('corpo_textual_fiel') is not True):
+                return
             if received_bytes is None and isinstance(body, str):
                 received_bytes = len(body.encode('utf-8'))
             if (listing_verified is True and result.get('status') == 200 and result.get('truncated') is False
@@ -127,7 +133,8 @@ def factual_context(objective, history):
     for item in eligible[-8:]:
         result = item['resultado']
         action = item.get('acao', {})
-        observed = {k: result[k] for k in ('status', 'truncated', 'redirect_followed', 'exit_code', 'error') if k in result}
+        observed = {k: result[k] for k in ('status', 'truncated', 'redirect_followed', 'exit_code', 'error',
+                                           'bytes_recebidos', 'content_length_divergente', 'captura_http') if k in result}
         if isinstance(result.get('headers'), dict):
             observed['headers'] = {k: v for k, v in result['headers'].items()
                                    if k.lower() in ('content-type', 'content-length')}

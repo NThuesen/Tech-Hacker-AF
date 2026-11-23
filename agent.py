@@ -142,6 +142,60 @@ def http_deadline():
             signal.setitimer(signal.ITIMER_REAL, max(0.001, previous_timer[0] - (time.monotonic() - started)), previous_timer[1])
 
 
+def capture_http_response(response):
+    """Mede a captura em bytes antes de decodificar ou redigir o corpo."""
+    raw_headers = response.getheaders()
+    fields = [(key.lower(), value.strip()) for key, value in raw_headers]
+    headers = {key: value[:1024] for key, value in raw_headers
+               if key.lower() in {'content-type', 'content-length', 'content-encoding',
+                                  'transfer-encoding', 'date'}}
+    lengths = [value for key, value in fields if key == 'content-length']
+    transfer = [value.lower() for key, value in fields if key == 'transfer-encoding']
+    encoding = [value.lower() for key, value in fields if key == 'content-encoding']
+    expected = None
+    if len(lengths) == 1:
+        length = lengths[0]
+        if 0 < len(length) <= 19 and length.isascii() and length.isdecimal():
+            expected = int(length)
+
+    if response.status in (204, 304) or 100 <= response.status < 200:
+        framing = 'sem_corpo'
+        expected = None
+    elif transfer == ['chunked'] and not lengths:
+        framing = 'chunked'
+    elif transfer or (lengths and expected is None):
+        framing = 'ambiguo'
+        expected = None
+    elif expected is not None:
+        framing = 'content_length'
+    else:
+        framing = 'fim_da_conexao'
+
+    interrupted = False
+    try:
+        data = response.read(MAX_BODY + 1)
+    except http.client.IncompleteRead as exc:
+        # O parser pode omitir o último fragmento parcial. Guardar apenas o que entregou.
+        data = exc.partial
+        interrupted = True
+    capped = len(data) > MAX_BODY
+    mismatch = expected is not None and not capped and len(data) != expected
+    textual = not interrupted and (not encoding or encoding == ['identity'])
+    body = data[:MAX_BODY].decode('utf-8', 'replace') if textual else ''
+    utf8_lossless = textual and body.encode('utf-8') == data[:MAX_BODY]
+    safe_body = redact(body)
+    result = {'status': response.status, 'headers': headers, 'body': safe_body,
+              'truncated': capped or mismatch or interrupted,
+              'bytes_recebidos': len(data), 'content_length_divergente': mismatch,
+              'captura_http': {'enquadramento': framing, 'bytes_declarados': expected,
+                               'limite_local_atingido': capped, 'leitura_interrompida': interrupted,
+                               'corpo_textual_fiel': utf8_lossless and body == safe_body},
+              'redirect_followed': False}
+    if interrupted:
+        result['error'] = 'leitura do corpo HTTP interrompida'
+    return result
+
+
 def execute(action, host, port=3000):
     validate_proposal(action)
     if host != '127.0.0.1' or type(port) is not int or not 1 <= port <= 65535:
@@ -156,16 +210,7 @@ def execute(action, host, port=3000):
             try:
                 body = p['body'].encode('utf-8') if tool == 'http_post' else None
                 conn.request('POST' if body is not None else 'GET', p['path'], body=body, headers={'Content-Type': 'application/json', 'Connection': 'close'})
-                response = conn.getresponse()
-                data = response.read(MAX_BODY + 1)
-                headers = {k: v[:1024] for k, v in response.getheaders()
-                           if k.lower() in {'content-type', 'content-length', 'date'}}
-                declared = next((v for k, v in headers.items() if k.lower() == 'content-length'), None)
-                expected_bytes = int(declared) if isinstance(declared, str) and declared.isdecimal() else None
-                incomplete = expected_bytes is not None and len(data) < expected_bytes
-                return redact({'status': response.status, 'headers': headers, 'body': data[:MAX_BODY].decode('utf-8', 'replace'),
-                               'truncated': len(data) > MAX_BODY or incomplete, 'bytes_recebidos': len(data),
-                               'content_length_divergente': incomplete, 'redirect_followed': False})
+                return capture_http_response(conn.getresponse())
             finally:
                 conn.close()
     except (OSError, subprocess.TimeoutExpired, http.client.HTTPException) as exc:

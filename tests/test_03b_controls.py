@@ -87,6 +87,18 @@ class ControlsTests(unittest.TestCase):
         self.assertTrue(result['truncated'])
         self.assertTrue(result['content_length_divergente'])
 
+    def test_unverifiable_http_capture_cannot_validate_listing(self):
+        guard = ScenarioGuard('INV-03-B')
+        listing = action('http_get', {'path': '/ftp/'})
+        for metadata in (
+                {'enquadramento': 'fim_da_conexao', 'corpo_textual_fiel': True},
+                {'enquadramento': 'content_length', 'corpo_textual_fiel': False}):
+            with self.subTest(metadata=metadata):
+                guard.observe(listing, {'status': 200, 'truncated': False,
+                                       'body': '<html>listing</html>', 'captura_http': metadata},
+                              listing_verified=True)
+                self.assertIsNone(guard.listing)
+
     def test_scenario_01_rejects_post_and_unlisted_routes(self):
         guard = ScenarioGuard('INV-01-B')
         self.assertIsNone(guard.check(action('nmap', {})))
