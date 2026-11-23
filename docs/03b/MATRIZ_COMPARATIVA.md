@@ -1,6 +1,6 @@
 # Matriz comparativa — investigações históricas e 03B
 
-**Estado:** três sessões 03B executadas; INV-03-B inconclusiva quanto ao controle `.md`. No histórico, as decisões foram **delegadas ao Codex**. Na INV-01-B, Nicholas decidiu pessoalmente; nas INV-02-B e INV-03-B, as decisões e conclusões foram **delegadas ao Codex**, conforme autorização informada por Nicholas. Fontes primárias permanecem privadas.
+**Estado:** três cenários 03B executados em quatro sessões; INV-03-B inconclusiva quanto ao controle `.md`. No histórico, as decisões foram **delegadas ao Codex**. Na INV-01-B, Nicholas decidiu pessoalmente; nas INV-02-B e INV-03-B, as decisões e conclusões foram **delegadas ao Codex**, conforme autorização informada por Nicholas. Fontes primárias permanecem privadas.
 
 | Cenário | Observação histórica | `result_id` histórico | Nova sessão 03B |
 |---|---|---|---|
@@ -15,3 +15,7 @@ Os testes de rede de 19/11 e a inspeção visual foram **relatados por Nicholas*
 ## Tentativa adicional INV-03-B
 
 Run `4463d8c1bcfb43bba4dc81292e4d20fb`: após restauração adicional autorizada, `/` respondeu 200 com limite de leitura; `/ftp/` respondeu 200 (`fe4d96fb080c41418344f764c34a0ec6`), com 11025 bytes recebidos contra 11079 declarados e `truncated=true`. O Codex encerrou sem executar o controle `.md`: não foi comprovado que a listagem estava completa. Não se estabeleceu a causa da diferença; o Qwen afirmou completude em contradição com o próprio indicador e aludiu a resposta `.md` inexistente. Revisões e conclusão foram delegadas ao Codex. Auditoria estrutural: 29 eventos, nenhuma lacuna.
+
+## Auditoria de 23/11
+
+O [diagnóstico de captura](DIAGNOSTICO_CAPTURA_HTTP.md) localizou a diferença antes da decodificação na última tentativa e reproduziu esse sintoma em memória. O cabeçalho original e o transporte histórico não puderam ser verificados além dos registros disponíveis. Nenhuma nova medição foi produzida. A [trilha anotada da INV-01-B](../video/EVIDENCIA_INV01B.md) vincula as três decisões humanas ao resultado e à avaliação de Nicholas para apresentação.

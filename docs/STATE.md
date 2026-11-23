@@ -1,6 +1,14 @@
 # Estado atual e handoff
 
-## Resultado atual — 03B ao vivo, 19/11/2026
+## Auditoria de entrega — 23/11/2026
+
+- **Captura HTTP corrigida com fixtures.** Na repetição da INV-03-B, o cliente mediu 11.025 bytes antes de decodificação ou gravação, ante 11.079 declarados. Estava abaixo do teto de 16 KiB, com o mesmo total depois da gravação. O registro não distingue falha no comprimento informado, transformação intermediária ou encerramento antecipado. Os cabeçalhos de codificação históricos não foram preservados. A nova captura separa essas dimensões, e a guarda recusa enquadramento ambíguo ou texto sem fidelidade. Veja o [diagnóstico](03b/DIAGNOSTICO_CAPTURA_HTTP.md).
+- **Auditoria privada.** 12 JSONL, 320 eventos, 20 execuções vinculadas a proposta, decisão, ação, resultado e interpretação, e 10 hashes de snapshots conferidos. Os arquivos de sessão tinham acesso privado e os eventos estavam em ordem, com IDs únicos. Uma tentativa histórica já interrompida permanece sem decisão posterior à interpretação. Manifesto SHA-256 da leitura armazenado sob `logs/`, sem editar os originais. Os hashes fixam a linha de base observada e não autenticam os eventos retrospectivamente. Os 17 pedidos e 16 respostas do replay histórico foram conferidos. Não houve ferramenta executada pelo replay.
+- **Entrega revisada.** [Matriz integral da rubrica](../CHECKLIST_RUBRICA.md), [relatório PDF](RELATORIO_ENTREGA.pdf), [roteiro](../roteiro_video.md), [trilha anotada INV-01-B](video/EVIDENCIA_INV01B.md) e [checklist de gravação](video/CHECKLIST_GRAVACAO.pdf). A demonstração usa os três ciclos humanos registrados por Nicholas em 19/11. As sessões delegadas, a cronologia de autoria do plano e os limites da rede permanecem descritos com suas lacunas.
+- **Verificações.** 103 testes descobertos, 100 PASS e 3 integrações opt-in SKIP. As 6 novas fixtures HTTP são sintéticas. Sintaxe Python e shell, `git diff --check`, dry-run de replay e verificações de conteúdo/paginação dos PDFs passaram. Auditoria de entrega sem testes novos no Juice Shop/Ollama, restaurações ou alterações de rede.
+- **P6 parcial.** O controle `.md` permanece inconclusivo. A rubrica aceita resultados limitados, por isso nenhuma rodada adicional é necessária para relatar o que foi observado. Eventual nova investigação exige autorização específica, condições atuais e supervisão. Permanecem pendentes a origem inicial do plano sem LLM, o aceite acadêmico da delegação relatada e o acesso aos originais do Kali. Nicholas deve gravar a demonstração já preparada e efetuar a revisão final.
+
+## Resultado 03B ao vivo — 19/11/2026
 
 - **INV-01-B:** Nicholas Thuesen supervisionou pessoalmente três GETs, com decisões registradas; `/`, versão e produto responderam HTTP 200. Versão 17.3.0. Run `f0e74216eeba4a3780b1eb41c48695ca`; sem Nmap nesta sessão.
 - **INV-02-B:** sob autorização de Nicholas, Codex decidiu e justificou cada ação como revisor delegado, não humano: controles A/B/C retornaram 401 e corpos iguais de 26 bytes. B/C foram propostas modificadas e revalidadas pelo Codex. Run `fe9737b23e8a4f37bb38b4e0fafd0c98`; isso não prova segurança geral.

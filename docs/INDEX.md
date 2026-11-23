@@ -11,7 +11,11 @@
 | `docs/STATE.md` | primeira leitura de cada sessão; estado real vs. pendente |
 | `docs/03b/INDEX.md` | **entrada principal do Codex** para programação integral P0–P5 em notas atômicas; P6 separado |
 | `docs/03b/EVIDENCIAS_REDE_2026-11-19.md` | testes de rede relatados por Nicholas, limites e pendências dos arquivos primários |
-| `docs/03b/MATRIZ_COMPARATIVA.md` | rastreabilidade histórica e campos pendentes para resultados supervisionados 03B |
+| `docs/03b/MATRIZ_COMPARATIVA.md` | resultados históricos e 03B, identificação de decisões e controle inconclusivo |
+| `docs/03b/DIAGNOSTICO_CAPTURA_HTTP.md` | análise do déficit de 54 bytes e correção com fixtures |
+| `CHECKLIST_RUBRICA.md` | matriz final da rubrica e lacunas demonstráveis |
+| `docs/RELATORIO_ENTREGA.pdf` | relatório acadêmico |
+| `roteiro_video.md` e `docs/video/` | roteiro, trilha da sessão humana e checklist de gravação |
 | `docs/OPERACAO_BLOCO03B_V2.md` | comandos implementados para sessão 03B, replay e métricas; limites e pré-condições |
 | `docs/ENGENHARIA_BLOCO02.md` | comandos, IDs e limitações dos ensaios técnicos do agente |
 | `docs/investigacoes/ANALISE_BLOCO03.md` | resultados reais INV-01/02/03, limitações e matriz de evidências |

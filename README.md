@@ -2,9 +2,13 @@
 
 Agente local supervisionado para o Juice Shop. Leia `diagnostico.md`, `docs/requisitos.md` e `PENDENCIAS.md`. O planejamento original está em `plano_humano.md`. **As três investigações técnicas do Bloco 03 já foram executadas** e possuem resumos em `docs/investigacoes/`; as decisões por ação foram delegadas ao Codex e a adequação acadêmica depende de revisão. O **Bloco 03B v2** está implementado e validado com fixtures; sessões ao vivo continuam pendentes.
 
+## Entrega acadêmica
+
+A revisão da AF está no [relatório de cinco páginas](docs/RELATORIO_ENTREGA.pdf) e na [matriz da rubrica](CHECKLIST_RUBRICA.md). Para gravar a demonstração, use o [roteiro](roteiro_video.md), a [trilha da INV-01-B](docs/video/EVIDENCIA_INV01B.md) e o [checklist de uma página](docs/video/CHECKLIST_GRAVACAO.pdf). A gravação usa o registro da sessão supervisionada, com alternativa offline. A INV-03-B mantém seu controle inconclusivo e a revisão acadêmica permanece pendente.
+
 ## Bloco 03B: operação e estado
 
-Consulte [operação 03B v2](docs/OPERACAO_BLOCO03B_V2.md), [estado verificável](docs/STATE.md) e [notas atômicas](docs/03b/INDEX.md). O replay não executa ferramentas; sessões reais exigem preflight e evidências atuais de rede. O relatório preparado está em [Markdown](docs/RELATORIO_ENTREGA.md) e [PDF de cinco páginas](docs/RELATORIO_ENTREGA.pdf); vídeo e revisão acadêmica seguem pendentes.
+Consulte [operação 03B v2](docs/OPERACAO_BLOCO03B_V2.md), [estado verificável](docs/STATE.md) e [notas atômicas](docs/03b/INDEX.md). O replay não executa ferramentas; sessões reais exigem preflight e evidências atuais de rede. Veja também o [diagnóstico da captura HTTP](docs/03b/DIAGNOSTICO_CAPTURA_HTTP.md).
 
 **Proposta prioritária v2:** compara decisões do Qwen, histórico e ledger, controles A/B/C e extensão/existência. Nicholas autorizou a implementação e delegou decisões ao Codex; essa delegação não comprova revisão acadêmica individual. O replay local com entradas simuladas foi executado e teve limitações de desenho e excesso do orçamento planejado, registrados em `docs/STATE.md`. Os documentos anteriores seguem como histórico.
 

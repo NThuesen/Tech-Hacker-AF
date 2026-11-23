@@ -57,6 +57,8 @@ Execute uma sessão de cada vez, na ordem acima. O processo exige TTY, registro 
 
 No cenário 02, cada corpo A/B/C é aceito no máximo uma vez; no 03, a resposta `/ftp/` completa deve ser reconhecida como listagem pelo operador antes do controle `.md` ou do positivo condicionado. A confirmação da listagem não demonstra inocuidade de arquivos. Resultados 423/429, erro, possível segredo ou qualquer redirecionamento param a sessão. Não execute enquanto rede, identidade ou disponibilidade não estiverem comprovadas. O modo humano exige entrada de terminal; o canal delegado separado é descrito abaixo.
 
+A captura distingue teto local, tamanho declarado, enquadramento HTTP e fidelidade do corpo textual. Captura ambígua, incompleta ou sem texto fiel não serve para afirmar completude. Veja o [diagnóstico da INV-03-B](03b/DIAGNOSTICO_CAPTURA_HTTP.md).
+
 O histórico declarou o Juice Shop 17.3.0 no container identificado por `lab_common.sh` e Qwen `qwen3:4b-instruct`. O estado real pode mudar: o preflight deve verificá-lo, não confiar apenas na documentação. Nenhuma configuração de pfSense, NAT ou firewall deve ser alterada por estes comandos.
 
 ## Métricas e privacidade
