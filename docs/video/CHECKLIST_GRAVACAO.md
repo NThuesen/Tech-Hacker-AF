@@ -1,12 +1,29 @@
 # Checklist de gravação — Nicholas
 
-**Meta:** gravar uma apresentação de 7 a 9 minutos, demonstrando a INV-01-B de 19/11/2026 com registros reais. A AF admite até 10 minutos.
+**Meta:** aproximadamente 8min40s, incluindo os quatro clipes já gravados. Limite de 10 minutos.
 
-1. Abra `roteiro_video.md` para leitura. Abra nessa ordem o PDF do relatório, esta pasta com `EVIDENCIA_INV01B.md`, a matriz comparativa 03B e o checklist da rubrica.
-2. Use visualização Markdown ou o editor local. Feche terminais, conversas e outras abas. Grave somente a janela de apresentação. Confira o microfone e o zoom da janela.
-3. Inicie a gravação na página 1 do relatório. Leia apenas os parágrafos de fala do roteiro. Mantenha a identificação de que se trata de uma demonstração com registros de uma sessão já encerrada.
-4. Aos 1m50s, abra a trilha INV-01-B e aponte para hipótese, propostas, aprovações, resultados e decisão de encerrar. Deixe a tabela na tela até o minuto 5m15s.
-5. Aos 5m15s, mostre a matriz comparativa. Cite os três 401, o 403 e a diferença de 54 bytes. Identifique as revisões das duas sessões como automatizadas e delegadas e mantenha o controle .md como inconclusivo.
-6. Aos 6m45s, volte à conclusão do relatório e mostre os critérios do checklist. Encerre após a última fala do roteiro.
-7. Se o GitHub estiver indisponível, abra os mesmos arquivos locais. Se só o PDF estiver acessível, use suas páginas 2 e 4 para exibir a sessão e a comparação. A gravação não depende do Juice Shop, Ollama ou VPN.
-8. Revise início, tabela de evidências e final. Confira som, legibilidade, duração de até 10 minutos e se a gravação exibiu só os materiais preparados. Salve o vídeo para entrega.
+## Antes de gravar
+
+1. Abra o roteiro no celular e as quatro abas no Windows: relatório, trilha INV-01-B, matriz comparativa e checklist da rubrica.
+2. Feche conversas e arquivos privados. Confira microfone, zoom e captura de tela. O KIT11 pode permanecer desligado.
+
+## Sequência de gravação e edição
+
+| Tempo | Tela / ação | Conteúdo |
+|---|---|---|
+| 0:00–0:45 | Relatório, página 1 | Introdução e objetivo |
+| 0:45–1:45 | Relatório, arquitetura e fluxo | Laboratório e agente |
+| 1:45–2:05 | Relatório | Introdução da demonstração |
+| 2:05–3:10 | Quatro clipes do KIT11 | Ensaio de engenharia de 23/11, separado da INV-01-B |
+| 3:10–4:00 | Trilha INV-01-B | Hipótese e plano |
+| 4:00–5:25 | Trilha INV-01-B | Três consultas, decisões e conclusão |
+| 5:25–6:20 | Matriz, INV-02 | Três respostas 401 |
+| 6:20–7:35 | Matriz, INV-03 | 403, diferença de 54 bytes e controle MD inconclusivo |
+| 7:35–8:40 | Relatório, página 5; checklist da rubrica | Análise crítica e conclusão |
+
+## Antes de entregar
+
+- Use apenas a fala do roteiro; as instruções de tela não são narradas.
+- Confira a sequência dos quatro clipes, o áudio, a legibilidade e a duração final.
+- Identifique corretamente as revisões automatizadas e a supervisão pessoal da INV-01-B. Preserve as limitações e os registros originais.
+- Se o GitHub estiver indisponível, use os arquivos locais e os clipes gravados. Não é necessário executar novamente o agente.
