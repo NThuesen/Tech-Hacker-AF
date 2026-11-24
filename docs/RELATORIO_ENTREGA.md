@@ -49,7 +49,7 @@ O `plano_humano.md` registrou H1–H3, ferramentas candidatas, variáveis e evid
 
 **Estratégia.** Manter um único identificador fictício e variar a senha. A é texto inválido, B é senha vazia e C é campo omitido. O histórico de 27/10 testou B e A, nessa ordem, com HTTP 401 e o mesmo corpo.
 
-**INV-02-B.** O Qwen propôs A. Depois repetiu propostas e descreveu de forma incorreta qual variante havia sido enviada. O Codex, revisor delegado, modificou duas propostas para completar B e C e confirmou cada alteração. As três execuções retornaram **HTTP 401**, mesmo tipo de conteúdo e mesmo corpo de 26 bytes. A comparação registrada considera status e corpo, sem atribuir igualdade a todos os cabeçalhos. IDs: `52511329…`, `c7e8f6ea…`, `6f1c957e…`.
+**INV-02-B.** O Qwen propôs A. Depois repetiu propostas e descreveu de forma incorreta qual variante havia sido enviada. O revisor automatizado delegado modificou duas propostas para completar B e C e confirmou cada alteração. As três execuções retornaram **HTTP 401**, mesmo tipo de conteúdo e mesmo corpo de 26 bytes. A comparação registrada considera status e corpo, sem atribuir igualdade a todos os cabeçalhos. IDs: `52511329…`, `c7e8f6ea…`, `6f1c957e…`.
 
 **Conclusão.** A diferença esperada entre as três respostas não foi observada com as entradas medidas. A amostra não sustenta inferências sobre bypass, enumeração, outras contas ou segurança geral do login.
 
@@ -57,7 +57,7 @@ O `plano_humano.md` registrou H1–H3, ferramentas candidatas, variáveis e evid
 
 **Estratégia.** Observar se há listagem de nomes e distinguir efeito da extensão do efeito da ausência. O histórico e a primeira rodada INV-03-B observaram listagem HTTP 200 e 403 no caminho de controle com extensão `.txt`. Como extensão e existência variaram juntas, o 403 deixa em aberto o comportamento diante de uma ausência com extensão permitida.
 
-**Repetição INV-03-B.** Nas duas rodadas de 19/11, a listagem declarou **11.079 bytes** e o corpo registrado teve **11.025** (`ea5956fd…`, `fe4d96fb…`). Na repetição, o contador antes da decodificação também mediu 11.025. O teto local era 16.384 bytes. A causa exata permanece indeterminada. O Qwen afirmou completude apesar do indicador de truncamento e fez referência a uma resposta `.md` que não existia. O Codex comparou os metadados e encerrou a rodada.
+**Repetição INV-03-B.** Nas duas rodadas de 19/11, a listagem declarou **11.079 bytes** e o corpo registrado teve **11.025** (`ea5956fd…`, `fe4d96fb…`). Na repetição, o contador antes da decodificação também mediu 11.025. O teto local era 16.384 bytes. A causa exata permanece indeterminada. O Qwen afirmou completude apesar do indicador de truncamento e fez referência a uma resposta `.md` que não existia. O revisor automatizado comparou os metadados e encerrou a rodada.
 
 **Conclusão.** A listagem de nomes foi observada. O controle `.md` não foi executado e permanece inconclusivo. O caso não estabeleceu acesso indevido a arquivos, inclusão local ou remota de arquivos ou falha geral de autorização. A correção de captura foi validada com fixtures, sem gerar novo resultado do Juice Shop.
 
@@ -68,12 +68,12 @@ O `plano_humano.md` registrou H1–H3, ferramentas candidatas, variáveis e evid
 | Cenário | O que o plano previa | O que o Qwen fez | O que o operador decidiu |
 |---|---|---|---|
 | Reconhecimento | Medir interface, versão e catálogo. Nmap era candidato | Propôs três GETs. Referenciou a versão ao propor o produto | Nicholas aprovou cada GET, avaliou resultados e encerrou com o objetivo atingido |
-| Autenticação | Comparar respostas mantendo fixo o identificador | Sugeriu A, repetiu propostas e confundiu variantes | Codex modificou e confirmou B/C. Comparou as três respostas reais |
-| Recursos | Condicionar o controle `.md` à evidência da listagem | Antecipou uma resposta ausente e chamou a listagem de completa | Codex interrompeu o controle. A diferença entre bytes recebidos e anunciados contrariava a interpretação |
+| Autenticação | Comparar respostas mantendo fixo o identificador | Sugeriu A, repetiu propostas e confundiu variantes | Revisão automatizada: modificou e confirmou B/C. Comparou as três respostas reais |
+| Recursos | Condicionar o controle `.md` à evidência da listagem | Antecipou uma resposta ausente e chamou a listagem de completa | Revisão automatizada: interrompeu o controle. A diferença entre bytes recebidos e anunciados contrariava a interpretação |
 
 **Erro concreto e correção.** Na repetição de recursos, o HTML terminava com o fechamento esperado e ainda assim havia déficit de 54 bytes. Uma fixture reproduziu esse fenômeno com o parser HTTP em memória. A captura passou a separar limite local, divergência de comprimento, enquadramento e fidelidade do texto. O histórico não reteve os cabeçalhos de codificação necessários nem a resposta bruta. As medições não atribuem a diferença ao servidor, intermediário ou transporte.
 
-**Autoria.** Nicholas supervisionou pessoalmente a INV-01-B. As duas outras investigações 03B tiveram revisões e conclusões registradas como delegadas ao Codex. Nicholas relatou anuência do professor para a adaptação, sem comprovação independente. A rubrica original pede supervisão do grupo na execução. A conformidade das sessões delegadas continua sujeita ao aceite acadêmico.
+**Autoria.** Nicholas supervisionou pessoalmente a INV-01-B. As duas outras investigações 03B tiveram revisões e conclusões registradas como delegadas a um revisor automatizado. Nicholas relatou anuência do professor para a adaptação, sem comprovação independente. A rubrica original pede supervisão do grupo na execução. A conformidade das sessões delegadas continua sujeita ao aceite acadêmico.
 
 **Replay.** O Qwen local recebeu entradas simuladas e suas propostas não foram executadas. Foram feitas 17 solicitações para um orçamento de 14, com 16 respostas registradas. O contexto de uma série omitiu a lista de ferramentas, e os formatos comparados não garantiam equivalência de informação. O replay não permite medir uma taxa justa de desvio nem estabelecer superioridade de um formato. O orçamento compartilhado bloqueia novas consultas sob o protocolo existente.
 
