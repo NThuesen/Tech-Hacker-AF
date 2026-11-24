@@ -152,7 +152,7 @@ Se preferir, deixe o trecho sem narração adicional e use a explicação do pr�
 >
 > Testamos três situações: senha incorreta, senha vazia e senha omitida. As três retornaram HTTP 401, com respostas iguais de vinte e seis bytes.
 >
-> Nessa investigação e na terceira, as decisões por ação foram delegadas ao Codex, com a autoria registrada separadamente. A aceitação acadêmica dessa modalidade foi relatada, mas ainda depende da confirmação do professor.
+>
 >
 > Um ponto interessante é que o Qwen repetiu propostas no teste de login. O revisor precisou modificar duas delas para completar as três comparações planejadas. Ou seja, o modelo ajudou, mas não conduziu toda a investigação sozinho.
 >
